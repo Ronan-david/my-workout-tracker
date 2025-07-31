@@ -1,19 +1,15 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
-  </nav>
-  <main>
-    <router-view />
-  </main>
+  <div id="app">
+    <Navigation />
+    <main class="main-content">
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <script setup lang="ts">
-// No script needed for this basic layout
+import Navigation from '@/components/Navigation.vue';
 </script>
 
-<style scoped lang="scss">
-main {
-  text-align: center;
-}
+<style lang="scss">
 </style>

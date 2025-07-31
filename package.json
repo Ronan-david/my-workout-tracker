@@ -18,7 +18,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.9",
+    "@types/chart.js": "^4.0.1",
+    "chart.js": "^4.5.0",
+    "graphql": "^16.11.0",
+    "lucide-vue-next": "^0.535.0",
+    "sass": "^1.89.2",
     "vue": "^3.5.18",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
