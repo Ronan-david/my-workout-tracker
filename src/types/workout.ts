@@ -26,7 +26,6 @@ export interface DailyWorkout {
   id: string;
   date: string;
   exercises: WorkoutExercise[];
-  totalDuration: number;
   completed: boolean;
 }
 

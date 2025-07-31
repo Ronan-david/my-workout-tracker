@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Dashboard from '@/views/Dashboard.vue';
-import Workout from '@/views/Workout.vue';
-import History from '@/views/History.vue';
+import Dashboard from '@/views/DashboardPage.vue';
+import Workout from '@/views/WorkoutPage.vue';
+import History from '@/views/HistoryPage.vue';
 
 const routes = [
   {
