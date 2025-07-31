@@ -33,8 +33,8 @@
               v-model="set.weight"
               class="set-select"
             >
-              <option value="0">Bodyweight</option>
-              <option v-for="w in weightOptions" :key="w" :value="w">{{ w }}kg</option>
+              <option value="0">Weight</option>
+              <option v-for="w in weightOptions" :key="w" :value="w">{{ w }}</option>
             </select>
           </div>
 

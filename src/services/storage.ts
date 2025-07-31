@@ -56,17 +56,6 @@ export class WorkoutStorageService {
     }
   }
 
-  static async importData(data: string): Promise<boolean> {
-    try {
-      const parsed = JSON.parse(data);
-      await this.writeToFile(parsed);
-      return true;
-    } catch (error) {
-      console.error('Error importing data:', error);
-      return false;
-    }
-  }
-
   private static async writeToFile(data: WorkoutHistory): Promise<void> {
     try {
       const response = await fetch('/api/save-workout', {
