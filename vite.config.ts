@@ -7,7 +7,7 @@ import fs from 'fs'
 import path from 'path'
 
 export default defineConfig({
-  base: '/my-workout-tracker/', 
+  base: '/my-workout-tracker', 
   plugins: [
     vue(),
     vueDevTools(),

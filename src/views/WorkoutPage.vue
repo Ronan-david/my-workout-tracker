@@ -95,7 +95,6 @@ async function updateExerciseSets(exerciseId: string, sets: WorkoutSet[]) {
   const exerciseIndex = currentWorkout.value.exercises.findIndex(ex => ex.exerciseId === exerciseId);
   if (exerciseIndex >= 0) {
     currentWorkout.value.exercises[exerciseIndex].sets = sets;
-    await saveWorkout();
   }
 }
 

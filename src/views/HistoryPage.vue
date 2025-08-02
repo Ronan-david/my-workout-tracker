@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { Download, TrendingUp } from 'lucide-vue-next';
+import WorkoutChart from '@/components/WorkoutChart.vue';
+import WorkoutSection from '@/components/WorkoutSection.vue';
+import { WorkoutStorageService } from '@/services/storage';
+import { allWorkouts } from '@/composables/fetchFirebaseDB';
+
+const exportData = async () => {
+  const dataStr = await WorkoutStorageService.exportData();
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(dataBlob);
+  link.download = `workout-history-${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  
+  URL.revokeObjectURL(link.href);
+}
+</script>
+
 <template>
   <div class="history-page">
     <header class="history-header">
@@ -13,29 +33,29 @@
       </div>
     </header>
 
-    <div v-if="workouts.length > 0" class="history-content">
+    <div v-if="allWorkouts.length > 0" class="history-content">
       <div class="charts-section">
         <WorkoutChart
-          :workouts
+          :workouts="allWorkouts"
           title="Workout Volume Over Time"
           type="volume"
         />
         
         <div class="charts-row">
           <WorkoutChart
-            :workouts
+            :workouts="allWorkouts"
             title="Exercise Frequency"
             type="frequency"
           />
           <WorkoutChart
-            :workouts
+            :workouts="allWorkouts"
             title="Total Sets Progress"
             type="progress"
           />
         </div>
       </div>
 
-      <WorkoutSection :workouts />
+      <WorkoutSection :workouts="allWorkouts" />
     </div>
 
     <div v-else class="empty-history">
@@ -48,34 +68,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { onMounted, ref } from 'vue';
-import { Download, TrendingUp } from 'lucide-vue-next';
-import WorkoutChart from '@/components/WorkoutChart.vue';
-import WorkoutSection from '@/components/WorkoutSection.vue';
-import { WorkoutStorageService } from '@/services/storage';
-import type { DailyWorkout } from '@/types/workout';
-
-const workouts = ref<DailyWorkout[]>([]);
-
-const exportData = async () => {
-  const dataStr = await WorkoutStorageService.exportData();
-  const dataBlob = new Blob([dataStr], { type: 'application/json' });
-  
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(dataBlob);
-  link.download = `workout-history-${new Date().toISOString().split('T')[0]}.json`;
-  link.click();
-  
-  URL.revokeObjectURL(link.href);
-}
-
-onMounted(async () => {
-  const history = await WorkoutStorageService.getHistory();
-  workouts.value = history.workouts;
-});
-</script>
 
 <style lang="scss" scoped>
 .history-page {

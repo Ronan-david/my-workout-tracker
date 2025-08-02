@@ -1,22 +1,16 @@
+import { ref as firebaseRef, push as pushToFirebase } from "firebase/database";
 import type { DailyWorkout, WorkoutHistory } from '../types/workout';
+import { getDatabase } from 'firebase/database';
 
 const STORAGE_FILE = '/workout-data.json';
 
 export class WorkoutStorageService {
   static async saveWorkout(workout: DailyWorkout): Promise<void> {
     try {
-      const history = await this.getHistory();
-      const existingIndex = history.workouts.findIndex(w => w.date === workout.date);
-      
-      if (existingIndex >= 0) {
-        history.workouts[existingIndex] = workout;
-      } else {
-        history.workouts.push(workout);
-      }
-      
-      history.workouts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      
-      await this.writeToFile(history);
+      const ddDlWkRef = getDatabase();
+      const allDailyWorkouts = firebaseRef(ddDlWkRef, 'dailyWorkout');
+      pushToFirebase(allDailyWorkouts, workout);
+
     } catch (error) {
       console.error('Error saving workout:', error);
     }

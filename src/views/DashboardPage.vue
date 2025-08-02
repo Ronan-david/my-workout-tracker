@@ -1,19 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed } from 'vue';
 import { Play } from 'lucide-vue-next';
 import EmptyWorkout from '@/components/EmptyWorkout.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
-import { WorkoutStorageService } from '@/services/storage';
-import type { DailyWorkout } from '@/types/workout';
-
-const workouts = ref<DailyWorkout[]>([]);
+import { allWorkouts } from '@/composables/fetchFirebaseDB';
 
 const today = computed(() => new Date().toISOString().split('T')[0]);
-
-onMounted(async () => {
-  const history = await WorkoutStorageService.getHistory();
-  workouts.value = history.workouts;
-});
 </script>
 
 <template>
@@ -35,8 +27,8 @@ onMounted(async () => {
     </header>
 
     <div class="dashboard-content">
-      <EmptyWorkout v-if="workouts.length === 0" :today />
-      <WorkoutSection v-else :workouts />
+      <EmptyWorkout v-if="allWorkouts.length === 0" :today />
+      <WorkoutSection v-else :workouts="allWorkouts" />
     </div>
   </div>
 </template>
