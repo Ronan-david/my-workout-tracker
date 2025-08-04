@@ -12,6 +12,15 @@ const emit = defineEmits<{
   setsUpdated: [sets: WorkoutSet[]];
 }>();
 
+const createNewSet = (): WorkoutSet => {
+  return {
+    reps: 0,
+    weight: 0,
+    duration: 0,
+    completedAt: new Date()
+  };
+}
+
 const sets = ref<WorkoutSet[]>(
   props.initialSets?.length ? 
     props.initialSets : 
@@ -27,15 +36,6 @@ const completedSets = computed(() =>
 const allSetsCompleted = computed(() => 
   sets.value.every(set => isSetCompleted(set)) && sets.value.length > 0
 );
-
-function createNewSet(): WorkoutSet {
-  return {
-    reps: 0,
-    weight: 0,
-    duration: 0,
-    completedAt: new Date()
-  };
-}
 
 const handleSetChange = (index: number) => {
   const set = sets.value[index];
@@ -139,40 +139,12 @@ watch(() => sets.value, () => {
 
 <style lang="scss" scoped>
 .set-tracker {
-  &__row {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
 
-  &__inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  &__summary {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-
-    &-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-  }
-}
-
-@media (min-width: 768px) {
-  .set-tracker {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
 
     &__exercise-info {
       margin-bottom: 1.5rem;
@@ -195,27 +167,120 @@ watch(() => sets.value, () => {
       margin-bottom: 1.5rem;
     }
 
-    &__row {
+  &__row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    background: #F9FAFB;
+    transition: all 0.2s ease;
+
+    &.completed {
+      background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
+      border-left: 4px solid #10B981;
+    }
+  }
+
+  &__number {
+    font-weight: 600;
+    color: #374151;
+    min-width: 60px;
+  }
+
+  &__inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__select {
+    padding: 0.5rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    background: white;
+    font-size: 0.875rem;
+    min-width: 120px;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+  }
+
+  &__complete {
+    color: #10B981;
+  }
+
+  &__summary {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #E5E7EB;
+
+    p {
+      margin: 0;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    &-buttons {
       display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #6B7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.complete-icon {
+  color: #10B981;
+}
+
+.add-set-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #2563EB;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #1D4ED8;
+  }
+}
+
+@media (min-width: 768px) {
+  .set-tracker {
+    &__row {
       flex-direction: row;
       align-items: center;
       gap: 1rem;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
-      background: #F9FAFB;
-      transition: all 0.2s ease;
-
-      &.completed {
-        background: linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%);
-        border-left: 4px solid #10B981;
-      }
-    }
-
-    &__number {
-      font-weight: 600;
-      color: #374151;
-      min-width: 60px;
     }
 
     &__inputs {
@@ -224,79 +289,14 @@ watch(() => sets.value, () => {
       flex: 1;
     }
 
-    &__select {
-      padding: 0.5rem;
-      border: 1px solid #D1D5DB;
-      border-radius: 6px;
-      background: white;
-      font-size: 0.875rem;
-      min-width: 120px;
-      transition: border-color 0.2s ease;
-
-      &:focus {
-        outline: none;
-        border-color: #2563EB;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-      }
-    }
-
-    &__complete {
-      color: #10B981;
-    }
-
     &__summary {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      padding-top: 1rem;
-      border-top: 1px solid #E5E7EB;
-
-      p {
-        margin: 0;
-        font-weight: 500;
-        color: #374151;
-      }
 
       &-buttons {
         flex-direction: row;
       }
-    }
-  }
-
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-
-    label {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: #6B7280;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-  }
-
-  .complete-icon {
-    color: #10B981;
-  }
-
-  .add-set-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: #2563EB;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background: #1D4ED8;
     }
   }
 }

@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { 
-  CheckCircle, Plus, Play 
+  CheckCircle, CircleMinus, Plus, Play 
 } from 'lucide-vue-next';
 import ExerciseCard from '@/components/ExerciseCard.vue';
 import SetTracker from '@/components/SetTracker.vue';
@@ -112,6 +112,12 @@ async function saveWorkout() {
   }
 }
 
+const cancelWorkout = () => {
+  currentWorkout.value = null;
+  showExerciseSelection.value = true;
+  selectedExercises.value = [];
+};
+
 function formatDate(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString('en-US', { 
     weekday: 'long',
@@ -133,15 +139,24 @@ function formatDate(dateStr: string): string {
         </p>
       </div>
 
-      <button 
-        v-if="currentWorkout && currentWorkout.exercises.length > 0"
-        @click="finishWorkout"
-        class="finish-btn"
-        :disabled="!hasCompletedSets"
-      >
-        <CheckCircle :size="18" />
-        Finish Workout
-      </button>
+      <div v-if="currentWorkout && currentWorkout.exercises.length > 0" class="workout-header__buttons">
+        <button 
+          @click="finishWorkout"
+          class="workout-header__buttons--finish"
+          :disabled="!hasCompletedSets"
+        >
+          <CheckCircle :size="18" />
+          Finish Workout
+        </button>
+        <button
+          @click="cancelWorkout"
+          class="workout-header__buttons--cancel"
+          :disabled="!hasCompletedSets"
+        >
+          <CircleMinus :size="18" />
+          Cancel Workout
+        </button>
+      </div>
     </header>
 
     <div class="workout-content">
@@ -220,40 +235,122 @@ function formatDate(dateStr: string): string {
 
 <style lang="scss" scoped>
 .workout {
-  &-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-
-  &-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    border-radius: 16px;
-    color: white;
-  }
-
-  &-header-content {
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 0 0 0.5rem;
+    &-page {
+      margin: 0 auto;
+      padding: 1rem;
     }
 
-    p {
-      opacity: 0.9;
-      margin: 0;
-      font-size: 1rem;
+    &-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      border-radius: 16px;
+      color: white;
+
+      .header-content h1 {
+        font-size: 1.5rem;
+      }
+
+      &__buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 1rem 1.5rem;
+          background: white;
+          border: none;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 0.875rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        &--finish {
+          color: #10B981;
+        }
+
+        &--cancel {
+          color: #db3113;
+        }
+      }
+    }
+
+    &-header-content {
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 0 0.5rem;
+      }
+
+      p {
+        opacity: 0.9;
+        margin: 0;
+        font-size: 1rem;
+      }
+    }
+
+    &-progress {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: #E5E7EB;
+        border-radius: 4px;
+        overflow: hidden;
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+          transition: width 0.3s ease;
+        }
+      }
+
+      .progress-text {
+        font-weight: 600;
+        color: #374151;
+        min-width: 80px;
+        text-align: right;
+      }
     }
   }
 
+.workout {
   &-progress {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    text-align: center;
     gap: 1rem;
     margin-bottom: 2rem;
     padding: 1.5rem;
@@ -279,41 +376,53 @@ function formatDate(dateStr: string): string {
       font-weight: 600;
       color: #374151;
       min-width: 80px;
-      text-align: right;
+      text-align: center;
     }
   }
 }
 
-.finish-btn {
+.exercise-filters {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 1.5rem;
-  background: white;
-  color: #10B981;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-
-
-.exercise-trackers {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
   margin-bottom: 2rem;
+  justify-content: center;
 }
+
+.exercises-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.875rem;
+  color: #374151;
+  min-width: 150px;
+
+  &:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+}
+
+
+.selection-actions {
+  position: sticky;
+  bottom: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
 
 .add-exercise-btn {
   display: flex;
@@ -334,64 +443,6 @@ function formatDate(dateStr: string): string {
     background: #E5E7EB;
     border-color: #9CA3AF;
   }
-}
-
-.selection-header {
-  text-align: center;
-  margin-bottom: 2rem;
-
-  h2 {
-    font-size: 1.875rem;
-    font-weight: 700;
-    color: #1F2937;
-    margin: 0 0 0.5rem;
-  }
-
-  p {
-    color: #6B7280;
-    font-size: 1.125rem;
-    margin: 0;
-  }
-}
-
-.exercise-filters {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  justify-content: center;
-}
-
-.filter-select {
-  padding: 0.75rem 1rem;
-  border: 1px solid #D1D5DB;
-  border-radius: 8px;
-  background: white;
-  font-size: 0.875rem;
-  color: #374151;
-  min-width: 150px;
-
-  &:focus {
-    outline: none;
-    border-color: #2563EB;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-  }
-}
-
-.exercises-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.selection-actions {
-  position: sticky;
-  bottom: 2rem;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  text-align: center;
 }
 
 .start-workout-btn {
@@ -415,41 +466,62 @@ function formatDate(dateStr: string): string {
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .workout {
     &-page {
+      max-width: 1200px;
       padding: 1rem;
     }
 
-    &-progress {
-      flex-direction: column;
-      gap: 1rem;
-      text-align: center;
+    &-header {
+      flex-direction: row;
 
-      .progress-text {
-        text-align: center;
+      &__buttons {
+        flex-direction: row;
       }
     }
 
-    &-header {
-      flex-direction: column;
-      gap: 1.5rem;
-      text-align: center;
+    &-progress {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
 
-      .header-content h1 {
-        font-size: 1.5rem;
+      .progress-text {
+        text-align: right;
       }
+    }
+  }
+
+  .exercise-trackers {
+    margin-bottom: 2rem;
+  }
+
+  .selection-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #1F2937;
+      margin: 0 0 0.5rem;
+    }
+
+    p {
+      color: #6B7280;
+      font-size: 1.125rem;
+      margin: 0;
     }
   }
 
   .exercise-filters {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
   }
 
   .exercises-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
   }
 }
 </style>

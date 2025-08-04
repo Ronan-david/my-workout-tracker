@@ -50,8 +50,8 @@ const  getTotalSets = (workout: DailyWorkout): number => {
     <h2>Recent Workouts</h2>
     <div class="workouts-list">
       <div 
-        v-for="workout in paginatedWorkouts" 
-        :key="workout.id"
+        v-for="(workout, index) in paginatedWorkouts" 
+        :key="index"
         class="workout-item"
       >
         <div class="workout-header">
@@ -79,8 +79,8 @@ const  getTotalSets = (workout: DailyWorkout): number => {
             </div>
             <div class="exercise-details">
               <span 
-                v-for="set in exercise.sets" 
-                :key="set.id"
+                v-for="(set, sIndex) in exercise.sets" 
+                :key="sIndex"
                 class="set-detail"
               >
                 {{ set.reps }}{{ set.weight ? ` × ${set.weight}kg` : '' }}{{ set.duration ? ` × ${set.duration}s` : '' }}
