@@ -121,15 +121,6 @@ function formatDate(dateStr: string): string {
     day: 'numeric' 
   });
 }
-
-onMounted(async () => {
-  // Load existing workout for the date
-  const existingWorkout = await WorkoutStorageService.getWorkoutByDate(date.value);
-  if (existingWorkout) {
-    currentWorkout.value = existingWorkout;
-    showExerciseSelection.value = false;
-  }
-});
 </script>
 
 <template>
