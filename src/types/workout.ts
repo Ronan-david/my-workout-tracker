@@ -8,9 +8,8 @@ export interface Exercise {
 }
 
 export interface WorkoutSet {
-  id: string;
   reps: number;
-  weight?: number;
+  weight: number;
   duration?: number;
   completedAt: Date;
 }
@@ -23,7 +22,6 @@ export interface WorkoutExercise {
 }
 
 export interface DailyWorkout {
-  id: string;
   date: string;
   exercises: WorkoutExercise[];
   completed: boolean;

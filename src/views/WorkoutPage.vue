@@ -14,7 +14,6 @@ const props = defineProps<{
   date?: string;
 }>();
 
-
 const router = useRouter();
 
 const date = computed(() => props.date || new Date().toISOString().split('T')[0]);
@@ -81,7 +80,6 @@ function startWorkout() {
   }));
 
   currentWorkout.value = {
-    id: Date.now().toString(),
     date: date.value,
     exercises: workoutExercises,
     completed: false
