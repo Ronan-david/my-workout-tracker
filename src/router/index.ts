@@ -5,7 +5,7 @@ import History from '@/views/HistoryPage.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/my-workout-tracker',
     name: 'Dashboard',
     component: Dashboard
   },

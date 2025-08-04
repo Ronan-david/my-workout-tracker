@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { 
   CheckCircle, Plus, Play 
@@ -13,6 +13,7 @@ import type { Exercise, DailyWorkout, WorkoutExercise, WorkoutSet } from '@/type
 const props = defineProps<{
   date?: string;
 }>();
+
 
 const router = useRouter();
 

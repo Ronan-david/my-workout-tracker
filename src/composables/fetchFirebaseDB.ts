@@ -11,6 +11,7 @@ const fetchOnce = async () => {
   loading.value = true;
 
   const dbRef = firebaseRef(getDatabase());
+  
   try {
     const snapshot = await get(child(dbRef, `dailyWorkout`));
     if (snapshot.exists()) {

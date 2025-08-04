@@ -1,20 +1,30 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { Dumbbell, Home, Play, BarChart3 } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
+const today = computed(() => new Date().toISOString().split('T')[0]);
+</script>
+
 <template>
   <nav class="main-nav">
     <div class="nav-container">
-      <router-link to="/" class="nav-brand">
+      <router-link to="/my-workout-tracker" class="nav-brand">
         <Dumbbell :size="24" />
         <span>FitTracker</span>
       </router-link>
       
       <div class="nav-links">
         <router-link 
-          to="/" 
+          to="/my-workout-tracker" 
           class="nav-link"
           active-class="active"
           exact
         >
           <Home :size="18" />
-          <span>Dashboard</span>
+          <span>{{ t('nav.dashboard') }}</span>
         </router-link>
         
         <router-link 
@@ -23,7 +33,7 @@
           active-class="active"
         >
           <Play :size="18" />
-          <span>Workout</span>
+          <span>{{ t('nav.workout') }}</span>
         </router-link>
         
         <router-link 
@@ -32,19 +42,12 @@
           active-class="active"
         >
           <BarChart3 :size="18" />
-          <span>History</span>
+          <span>{{ t('nav.history') }}</span>
         </router-link>
       </div>
     </div>
   </nav>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue';
-import { Dumbbell, Home, Play, BarChart3 } from 'lucide-vue-next';
-
-const today = computed(() => new Date().toISOString().split('T')[0]);
-</script>
 
 <style lang="scss" scoped>
 .main-nav {
