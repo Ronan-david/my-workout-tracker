@@ -11,7 +11,7 @@ const { today } = defineProps<{
     <Dumbbell :size="48" class="empty-icon" />
     <p>No workouts yet. Start your first workout today!</p>
     <router-link 
-      :to="`/workout/${today}`" 
+      :to="`/my-workout-tracker/workout/${today}`" 
       class="start-first-workout-btn"
     >
       Start Your First Workout
