@@ -10,13 +10,13 @@ const routes = [
     component: Dashboard
   },
   {
-    path: '/workout/:date?',
+    path: '/my-workout-tracker/workout/:date?',
     name: 'Workout',
     component: Workout,
     props: true
   },
   {
-    path: '/history',
+    path: '/my-workout-tracker/history',
     name: 'History',
     component: History
   }

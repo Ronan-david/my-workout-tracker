@@ -28,7 +28,7 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
         </router-link>
         
         <router-link 
-          :to="`/workout/${today}`" 
+          :to="`/my-workout-tracker/workout/${today}`" 
           class="nav-link"
           active-class="active"
         >
@@ -37,7 +37,7 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
         </router-link>
         
         <router-link 
-          to="/history" 
+          to="/my-workout-tracker/history" 
           class="nav-link"
           active-class="active"
         >
