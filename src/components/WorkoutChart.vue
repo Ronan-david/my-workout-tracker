@@ -1,27 +1,30 @@
-<template>
-  <div class="chart-container">
-    <div class="chart-header">
-      <h3>{{ title }}</h3>
-      <div class="chart-controls">
-        <select v-model="selectedPeriod" @change="updateChart" class="period-select">
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 90 days</option>
-        </select>
-      </div>
-    </div>
-    <div class="chart-wrapper">
-      <canvas ref="chartCanvas"></canvas>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, watch, nextTick } from 'vue';
-import { Chart, type ChartConfiguration, registerables } from 'chart.js';
+import { ref, onMounted, watch } from 'vue';
+import { Line } from 'vue-chartjs';
 import type { DailyWorkout } from '../types/workout';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+  Filler
+} from 'chart.js';
+import type { ChartData } from '@/types/chartData';
 
-Chart.register(...registerables);
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement,
+  Filler
+);
 
 const props = defineProps<{
   workouts: DailyWorkout[];
@@ -29,87 +32,66 @@ const props = defineProps<{
   type: 'volume' | 'frequency' | 'progress';
 }>();
 
-const chartCanvas = ref<HTMLCanvasElement>();
+const selectedExercise = ref('bench press');
 const selectedPeriod = ref(30);
-let chartInstance: Chart | null = null;
 
-onMounted(() => {
-  nextTick(() => {
-    initChart();
-  });
+const chartData = ref<ChartData>({
+  labels: [],
+  datasets: []
 });
 
-watch(() => props.workouts, () => {
-  updateChart();
-}, { deep: true });
-
-function initChart() {
-  if (!chartCanvas.value) return;
-
-  const ctx = chartCanvas.value.getContext('2d');
-  if (!ctx) return;
-
-  const data = getChartData();
-  
-  const config: ChartConfiguration = {
-    type: 'line',
-    data,
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-        },
-        tooltip: {
-          mode: 'index',
-          intersect: false,
-        },
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: true,
+      position: 'top' as const,
+    },
+    tooltip: {
+      mode: 'index' as const,
+      intersect: false,
+    },
+  },
+  scales: {
+    x: {
+      display: true,
+      title: {
+        display: true,
+        text: 'Date'
       },
-      scales: {
-        x: {
-          display: true,
-          title: {
-            display: true,
-            text: 'Date'
-          },
-          grid: {
-            color: '#F3F4F6'
-          }
-        },
-        y: {
-          display: true,
-          title: {
-            display: true,
-            text: getYAxisLabel()
-          },
-          beginAtZero: true,
-          grid: {
-            color: '#F3F4F6'
-          }
-        }
+      grid: {
+        color: '#F3F4F6'
+      }
+    },
+    y: {
+      display: true,
+      title: {
+        display: true,
+        text: getYAxisLabel()
       },
-      interaction: {
-        mode: 'nearest',
-        axis: 'x',
-        intersect: false
+      beginAtZero: true,
+      grid: {
+        color: '#F3F4F6'
       }
     }
-  };
+  },
+  interaction: {
+    mode: 'nearest' as const,
+    axis: 'x' as const,
+    intersect: false
+  }
+};
 
-  chartInstance = new Chart(ctx, config);
-}
+watch([() => props.workouts, selectedExercise], () => {
+  updateChartData();
+}, { deep: true });
 
-function updateChart() {
-  if (!chartInstance) return;
-  
-  const data = getChartData();
-  chartInstance.data = data;
-  chartInstance.update();
-}
+onMounted(() => {
+  updateChartData();
+});
 
-function getChartData() {
+const updateChartData = () => {
   const now = new Date();
   const startDate = new Date(now.getTime() - selectedPeriod.value * 24 * 60 * 60 * 1000);
   
@@ -129,29 +111,20 @@ function getChartData() {
     let value = 0;
 
     if (workout) {
-      switch (props.type) {
-        case 'volume':
-          value = workout.exercises.reduce((total, ex) => 
-            total + ex.sets.reduce((setTotal, set) => 
-              setTotal + (set.reps * (set.weight || 1)), 0), 0);
-          break;
-        case 'frequency':
-          value = workout.exercises.length;
-          break;
-        case 'progress':
-          value = workout.exercises.reduce((total, ex) => 
-            total + ex.sets.length, 0);
-          break;
+      const exercise = workout.exercises.find(ex => ex.exercise.name.toLowerCase() === selectedExercise.value.toLowerCase());
+      if (exercise) {
+        // Get the maximum weight lifted in this session for this exercise
+        value = Math.max(...exercise.sets.map(set => set.weight || 0));
       }
     }
 
     dataPoints.push(value);
   }
 
-  return {
+  chartData.value = {
     labels,
     datasets: [{
-      label: getDatasetLabel(),
+      label: `Weight Progression for ${selectedExercise.value}`,
       data: dataPoints,
       borderColor: '#2563EB',
       backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -165,26 +138,43 @@ function getChartData() {
       pointHoverRadius: 6,
     }]
   };
-}
+};
 
 function getYAxisLabel(): string {
-  switch (props.type) {
-    case 'volume': return 'Total Volume (reps × weight)';
-    case 'frequency': return 'Number of Exercises';
-    case 'progress': return 'Total Sets';
-    default: return '';
-  }
-}
-
-function getDatasetLabel(): string {
-  switch (props.type) {
-    case 'volume': return 'Workout Volume';
-    case 'frequency': return 'Exercise Count';
-    case 'progress': return 'Sets Completed';
-    default: return '';
-  }
+  return 'Weight (lbs/kg)';
 }
 </script>
+
+<template>
+  <div class="chart-container">
+    <div class="chart-header">
+      <h3>{{ title }}</h3>
+      <div class="chart-controls">
+        <select v-model="selectedExercise" @change="updateChartData" class="exercise-select">
+          <option value="">Select Exercise</option>
+          <option value="bench press">Bench Press</option>
+          <option value="deadlifts">Deadlift</option>
+        </select>
+        <select v-model="selectedPeriod" @change="updateChartData" class="period-select">
+          <option value="7">Last 7 days</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+      </div>
+    </div>
+    <div class="chart-wrapper">
+      <Line
+        v-if="selectedExercise && chartData.datasets.length > 0"
+        :data="chartData"
+        :options="chartOptions"
+      />
+      <div v-else class="no-data-message">
+        <p v-if="!selectedExercise">Please select an exercise to view progression</p>
+        <p v-else>No data available for the selected exercise and period</p>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .chart-container {
@@ -209,6 +199,13 @@ function getDatasetLabel(): string {
   }
 }
 
+.chart-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.exercise-select,
 .period-select {
   padding: 0.5rem;
   border: 1px solid #D1D5DB;
@@ -216,11 +213,26 @@ function getDatasetLabel(): string {
   background: white;
   font-size: 0.875rem;
   color: #374151;
+  min-width: 150px;
 
   &:focus {
     outline: none;
     border-color: #2563EB;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+}
+
+.no-data-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6B7280;
+  font-size: 1rem;
+
+  p {
+    margin: 0;
+    text-align: center;
   }
 }
 
@@ -234,6 +246,17 @@ function getDatasetLabel(): string {
     flex-direction: column;
     gap: 1rem;
     align-items: stretch;
+  }
+
+  .chart-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .exercise-select,
+  .period-select {
+    min-width: auto;
+    width: 100%;
   }
 
   .chart-wrapper {
