@@ -3,7 +3,9 @@ import { Download, TrendingUp } from 'lucide-vue-next';
 import WorkoutChart from '@/components/WorkoutChart.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
 import { WorkoutStorageService } from '@/services/storage';
-import { allWorkouts } from '@/composables/fetchFirebaseDB';
+import LoadingComp from '@/components/LoadingComp.vue';
+
+import { loading, error, allWorkouts } from '@/composables/fetchFirebaseDB';
 
 const exportData = async () => {
   const dataStr = await WorkoutStorageService.exportData();
@@ -33,7 +35,11 @@ const exportData = async () => {
       </div>
     </header>
 
-    <div v-if="allWorkouts.length > 0" class="history-content">
+    <LoadingComp v-if="loading" />
+    <p v-else-if="error" class="error-message">
+      An error occurred while fetching workouts. Please try again later.
+    </p>
+    <div v-else-if="allWorkouts.length > 0" class="history-content">
       <div class="charts-section">
         <WorkoutChart
           :workouts="allWorkouts"

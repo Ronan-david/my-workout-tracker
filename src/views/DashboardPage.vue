@@ -3,7 +3,8 @@ import { computed } from 'vue';
 import { Play } from 'lucide-vue-next';
 import EmptyWorkout from '@/components/EmptyWorkout.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
-import { allWorkouts } from '@/composables/fetchFirebaseDB';
+import LoadingComp from '@/components/LoadingComp.vue';
+import { loading, error, allWorkouts } from '@/composables/fetchFirebaseDB';
 
 const today = computed(() => new Date().toISOString().split('T')[0]);
 </script>
@@ -27,7 +28,11 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
     </header>
 
     <div class="dashboard-content">
-      <EmptyWorkout v-if="allWorkouts.length === 0" :today />
+      <LoadingComp v-if="loading" />
+      <p v-else-if="error" class="error-message">
+        An error occurred while fetching workouts. Please try again later.
+      </p>
+      <EmptyWorkout v-else-if="allWorkouts.length === 0 && !loading && !error" :today />
       <WorkoutSection v-else :workouts="allWorkouts" />
     </div>
   </div>
