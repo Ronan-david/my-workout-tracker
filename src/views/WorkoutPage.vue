@@ -69,7 +69,7 @@ function toggleExercise(exercise: Exercise) {
   }
 }
 
-function startWorkout() {
+const startWorkout = () => {
   if (selectedExercises.value.length === 0) return;
 
   const workoutExercises: WorkoutExercise[] = selectedExercises.value.map(exercise => ({
@@ -88,7 +88,7 @@ function startWorkout() {
   showExerciseSelection.value = false;
 }
 
-async function updateExerciseSets(exerciseId: string, sets: WorkoutSet[]) {
+const updateExerciseSets = async (exerciseId: string, sets: WorkoutSet[]) => {
   if (!currentWorkout.value) return;
 
   const exerciseIndex = currentWorkout.value.exercises.findIndex(ex => ex.exerciseId === exerciseId);
@@ -97,7 +97,7 @@ async function updateExerciseSets(exerciseId: string, sets: WorkoutSet[]) {
   }
 }
 
-async function finishWorkout() {
+const finishWorkout = async () => {
   if (!currentWorkout.value) return;
 
   currentWorkout.value.completed = true;
@@ -106,7 +106,7 @@ async function finishWorkout() {
   router.push('/');
 }
 
-async function saveWorkout() {
+const saveWorkout = async () => {
   if (currentWorkout.value) {
     await WorkoutStorageService.saveWorkout(currentWorkout.value);
   }

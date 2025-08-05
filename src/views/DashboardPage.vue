@@ -18,7 +18,7 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
       </div>
       <div class="header-actions">
         <router-link 
-          :to="`/workout/${today}`" 
+          :to="`/my-workout-tracker/workout/${today}`" 
           class="start-workout-btn"
         >
           <Play :size="18" />

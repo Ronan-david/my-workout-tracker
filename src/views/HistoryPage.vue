@@ -68,7 +68,7 @@ const exportData = async () => {
       <TrendingUp :size="64" class="empty-icon" />
       <h2>No Workout History Yet</h2>
       <p>Start tracking your workouts to see your progress over time.</p>
-      <router-link to="/" class="start-tracking-btn">
+      <router-link to="//my-workout-tracker" class="start-tracking-btn">
         Start Your First Workout
       </router-link>
     </div>
