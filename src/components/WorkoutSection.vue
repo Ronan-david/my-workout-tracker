@@ -11,13 +11,17 @@ const currentPage = ref(1);
 const itemsPerPage = 10;
 
 const totalPages = computed(() => 
-  Math.ceil(workouts.length / itemsPerPage)
+  Math.ceil(workoutsInReversedDateOrder.value.length / itemsPerPage)
 );
+
+const workoutsInReversedDateOrder = computed(() => {
+  return [...workouts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+});
 
 const paginatedWorkouts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  return workouts.slice(start, end);
+  return workoutsInReversedDateOrder.value.slice(start, end);
 });
 
 const formatDate = (dateStr: string): string => {

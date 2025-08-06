@@ -11,15 +11,7 @@ import { LoaderCircle } from 'lucide-vue-next';
   display: block;
   margin: 0 auto;
   color: #2563EB;
-  animation: spin 2s linear infinite;
-}
 
-@keyframes spin {
-  from {
-    transform:rotate(0deg);
-  }
-  to {
-    transform:rotate(360deg);
-  }
+  @include spin;
 }
 </style>
