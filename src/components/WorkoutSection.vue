@@ -2,10 +2,13 @@
 import type { DailyWorkout } from '@/types/workout';
 import { computed, ref } from 'vue';
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 
 const { workouts } = defineProps<{
   workouts: DailyWorkout[];
 }>();
+
+const { t } = useI18n();
 
 const currentPage = ref(1);
 const itemsPerPage = 10;
@@ -51,7 +54,7 @@ const  getTotalSets = (workout: DailyWorkout): number => {
 </script>
 <template>
   <div class="workouts-section">
-    <h2>Recent Workouts</h2>
+    <h2>{{ t('workout.title') }}</h2>
     <div class="workouts-list">
       <div 
         v-for="(workout, index) in paginatedWorkouts" 
@@ -66,8 +69,8 @@ const  getTotalSets = (workout: DailyWorkout): number => {
             </span>
           </div>
           <div class="workout-stats">
-            <span class="stat">{{ workout.exercises.length }} exercises</span>
-            <span class="stat">{{ getTotalSets(workout) }} sets</span>
+            <span class="stat">{{ t('workout.exercise', { count: workout.exercises.length }) }}</span>
+            <span class="stat">{{ t('workout.set', { count: getTotalSets(workout) }) }}</span>
           </div>
         </div>
         
@@ -79,7 +82,7 @@ const  getTotalSets = (workout: DailyWorkout): number => {
           >
             <div class="exercise-info">
               <span class="exercise-name">{{ exercise.exercise.name }}</span>
-              <span class="exercise-sets">{{ exercise.sets.length }} sets</span>
+              <span class="exercise-sets">{{ t('workout.set', { count: exercise.sets.length }) }}</span>
             </div>
             <div class="exercise-details">
               <span 
