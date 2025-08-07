@@ -7,6 +7,10 @@ import LoadingComp from '@/components/LoadingComp.vue';
 import { loading, error, allWorkouts } from '@/composables/fetchFirebaseDB';
 
 const today = computed(() => new Date().toISOString().split('T')[0]);
+
+const getFirstThreeWorkouts = () => {
+  return allWorkouts.value.slice(0, 3);
+}
 </script>
 
 <template>
@@ -33,7 +37,10 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
         An error occurred while fetching workouts. Please try again later.
       </p>
       <EmptyWorkout v-else-if="allWorkouts.length === 0 && !loading && !error" :today />
-      <WorkoutSection v-else :workouts="allWorkouts" />
+      <WorkoutSection v-else :workouts="getFirstThreeWorkouts()" />
+      <div v-if="allWorkouts.length > 3" class="dashboard-history">
+        <router-link class="view-all-btn" to="/my-workout-tracker/history">View All Workouts</router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +50,11 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+
+  &-history {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .dashboard-header {
@@ -87,6 +99,21 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   }
+}
+
+.view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: #2563EB;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 @media (max-width: 768px) {

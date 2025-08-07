@@ -103,7 +103,7 @@ const finishWorkout = async () => {
   currentWorkout.value.completed = true;
   
   await saveWorkout();
-  router.push('/');
+  router.push('/my-workout-tracker');
 }
 
 const saveWorkout = async () => {
