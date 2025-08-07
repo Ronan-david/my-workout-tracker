@@ -3,5 +3,10 @@
     "dashboard": "Dashboard",
     "workout": "Workout",
     "history": "History"
+  },
+  "workout": {
+    "title": "Recent Workouts",
+    "exercise": "exercise | { count } exercises",
+    "set": "set | { count } sets"
   }
 }
