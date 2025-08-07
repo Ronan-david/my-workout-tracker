@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { CheckCircle, Plus } from 'lucide-vue-next';
 import type { Exercise, WorkoutSet } from '../types/workout';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
   exercise: Exercise;
@@ -11,6 +12,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   setsUpdated: [sets: WorkoutSet[]];
 }>();
+
+const { t } = useI18n();
 
 const createNewSet = (): WorkoutSet => {
   return {
@@ -26,8 +29,6 @@ const sets = ref<WorkoutSet[]>(
     props.initialSets : 
     [createNewSet()]
 );
-
-const weightOptions = Array.from({ length: 50 }, (_, i) => (i + 1) * 2.5);
 
 const completedSets = computed(() => 
   sets.value.filter(set => isSetCompleted(set)).length
@@ -79,30 +80,31 @@ watch(() => sets.value, () => {
           class="set-tracker__row"
           :class="{ completed: isSetCompleted(set) }"
         >
-          <span class="set-tracker__number">Set {{ index + 1 }}</span>
+          <span class="set-tracker__number">{{ t('set-tracker.set') }} {{ index + 1 }}</span>
           
           <div class="set-tracker__inputs">
             <div class="input-group">
-              <label>Reps</label>
-              <select 
-                v-model="set.reps"
-                @change="handleSetChange(index)"
+              <label>{{ t('set-tracker.reps') }}</label>
+              <input 
+                type="number" 
+                v-model.number="set.reps" 
+                @input="handleSetChange(index)"
+                :min="0"
                 class="set-tracker__select"
-              >
-                <option value="0">Select reps</option>
-                <option v-for="n in 50" :key="n" :value="n">{{ n }}</option>
-              </select>
+                :placeholder="t('set-tracker.select-reps')"
+              />
             </div>
 
             <div class="input-group">
-              <label>Weight (kg)</label>
-              <select 
-                v-model="set.weight"
+              <label>{{ t('set-tracker.weight') }}</label>
+              <input 
+                type="number" 
+                v-model.number="set.weight" 
+                @input="handleSetChange(index)"
+                :min="0"
                 class="set-tracker__select"
-              >
-                <option value="0">Weight</option>
-                <option v-for="weightOption in weightOptions" :key="weightOption" :value="weightOption">{{ weightOption }}</option>
-              </select>
+                :placeholder="t('set-tracker.select-weights')"
+              />
             </div>
           </div>
 
@@ -115,7 +117,7 @@ watch(() => sets.value, () => {
     
 
     <div class="set-tracker__summary">
-      <p>Completed Sets: {{ completedSets }}/{{ sets.length }}</p>
+      <p>{{ t('set-tracker.completed-sets', { completed: completedSets, total: sets.length }) }}</p>
 
       <div v-if="allSetsCompleted" class="set-tracker__summary-buttons">
         <button 
@@ -123,14 +125,14 @@ watch(() => sets.value, () => {
           class="add-set-btn"
         >
           <Plus :size="16" />
-          Duplicate Last Set
+          {{ t('set-tracker.duplicate-set') }}
         </button>
         <button 
           @click="addSet"
           class="add-set-btn"
         >
           <Plus :size="16" />
-          Add Another Set
+            {{ t('set-tracker.add-set') }}
         </button>
       </div>
     </div>

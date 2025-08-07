@@ -8,5 +8,15 @@
     "title": "Recent Workouts",
     "exercise": "exercise | { count } exercises",
     "set": "set | { count } sets"
+  },
+  "set-tracker": {
+    "set": "Set",
+    "reps": "Reps",
+    "weight": "Weight (kg)",
+    "select-reps": "Select reps",
+    "select-weights": "Select weights",
+    "completed-sets": "Completed Sets: { completed }/{ total }",
+    "duplicate-set": "Duplicate Last Set",
+    "add-set": "Add Another Set"
   }
 }
