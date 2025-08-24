@@ -47,7 +47,7 @@ const formatDate = (dateStr: string): string => {
   }
 }
 
-const  getTotalSets = (workout: DailyWorkout): number => {
+const getTotalSets = (workout: DailyWorkout): number => {
   return workout.exercises.reduce((total, ex) => total + ex.sets.length, 0);
 }
 

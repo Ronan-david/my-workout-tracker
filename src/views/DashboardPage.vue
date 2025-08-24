@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import { Play } from 'lucide-vue-next';
 import EmptyWorkout from '@/components/EmptyWorkout.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
 import LoadingComp from '@/components/LoadingComp.vue';
 import { loading, error, allWorkouts } from '@/composables/fetchFirebaseDB';
+import { today } from '@/composables/todayDate'
 
-const today = computed(() => new Date().toISOString().split('T')[0]);
-
-const getFirstThreeWorkouts = () => {
-  return allWorkouts.value.slice(0, 3);
+const getLastThreeWorkouts = () => {
+  return allWorkouts.value.slice(-3)
 }
 </script>
 
@@ -37,7 +35,7 @@ const getFirstThreeWorkouts = () => {
         An error occurred while fetching workouts. Please try again later.
       </p>
       <EmptyWorkout v-else-if="allWorkouts.length === 0 && !loading && !error" :today />
-      <WorkoutSection v-else :workouts="getFirstThreeWorkouts()" />
+      <WorkoutSection v-else :workouts="getLastThreeWorkouts()" />
       <div v-if="allWorkouts.length > 3" class="dashboard-history">
         <router-link class="view-all-btn" to="/my-workout-tracker/history">View All Workouts</router-link>
       </div>

@@ -21,7 +21,6 @@ const fetchOnce = async () => {
         workoutsList.push({ id, ...data[id] });
       }
       allWorkouts.value = workoutsList;
-      console.log("All workouts fetched once:", allWorkouts);
     } else {
       allWorkouts.value  = [];
       console.log("No workouts available (fetched once).");
