@@ -3,14 +3,16 @@ import { computed, ref, watch } from 'vue';
 import { CheckCircle, Plus } from 'lucide-vue-next';
 import type { Exercise, WorkoutSet } from '../types/workout';
 import { useI18n } from 'vue-i18n';
+import { CircleMinus } from 'lucide-vue-next';
 
-const props = defineProps<{
+const { exercise, initialSets} = defineProps<{
   exercise: Exercise;
   initialSets?: WorkoutSet[];
 }>();
 
 const emit = defineEmits<{
   setsUpdated: [sets: WorkoutSet[]];
+  deleteExercise: [exercise: Exercise];Ò
 }>();
 
 const { t } = useI18n();
@@ -25,8 +27,8 @@ const createNewSet = (): WorkoutSet => {
 }
 
 const sets = ref<WorkoutSet[]>(
-  props.initialSets?.length ? 
-    props.initialSets : 
+  initialSets?.length ? 
+    initialSets : 
     [createNewSet()]
 );
 
@@ -62,6 +64,10 @@ const isSetCompleted = (set: WorkoutSet): boolean => {
   return set.reps > 0 && set.weight > 0;
 };
 
+const deleteExercise = () => {
+  emit('deleteExercise', exercise)
+}
+
 watch(() => sets.value, () => {
   emit('setsUpdated', sets.value.filter(s => isSetCompleted(s)));
 }, { deep: true });
@@ -70,8 +76,19 @@ watch(() => sets.value, () => {
 <template>
   <div class="set-tracker">
     <div class="set-tracker__exercise-info">
-      <h3>{{ exercise.name }}</h3>
-      <p>{{ exercise.description }}</p>
+      <div class="">
+        <h3>{{ exercise.name }}</h3>
+        <p>{{ exercise.description }}</p>
+      </div>
+
+      <div class="set-tracker__buttons">
+        <button
+          @click="deleteExercise"
+          class="set-tracker__buttons--cancel"
+        >
+          <CircleMinus :size="18" />
+        </button>
+      </div>
     </div>
 
     <div class="set-tracker__container">
@@ -147,27 +164,28 @@ watch(() => sets.value, () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
 
+  &__exercise-info {
+    display: flex;
+    flex-direction: column-reverse;
+    margin-bottom: 1.5rem;
 
-    &__exercise-info {
-      margin-bottom: 1.5rem;
-
-      h3 {
-        color: #1F2937;
-        margin: 0 0 0.5rem;
-        font-size: 1.25rem;
-        font-weight: 600;
-      }
-
-      p {
-        color: #6B7280;
-        margin: 0;
-        font-size: 0.875rem;
-      }
+    h3 {
+      color: #1F2937;
+      margin: 0 0 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
     }
 
-    &__container {
-      margin-bottom: 1.5rem;
+    p {
+      color: #6B7280;
+      margin: 0;
+      font-size: 0.875rem;
     }
+  }
+
+  &__container {
+    margin-bottom: 1.5rem;
+  }
 
   &__row {
     display: flex;
@@ -238,6 +256,24 @@ watch(() => sets.value, () => {
       gap: 0.5rem;
     }
   }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+
+    button {
+      background: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    &--cancel {
+      color: #db3113;
+    }
+  }
 }
 
 .input-group {
@@ -279,6 +315,10 @@ watch(() => sets.value, () => {
 
 @media (min-width: 768px) {
   .set-tracker {
+    &__exercise-info {
+      flex-direction: row;
+      justify-content: space-between;
+    }
     &__row {
       flex-direction: row;
       align-items: center;

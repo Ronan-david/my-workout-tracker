@@ -97,6 +97,14 @@ const updateExerciseSets = async (exerciseId: string, sets: WorkoutSet[]) => {
   }
 }
 
+const deleteExercise = (exercise: Exercise) => {
+  if (!currentWorkout.value) return;
+
+  const exerciseIndex = currentWorkout.value.exercises.findIndex(ex => ex.exerciseId === exercise.id);
+
+  currentWorkout.value.exercises.splice(exerciseIndex, 1);
+}
+
 const finishWorkout = async () => {
   if (!currentWorkout.value) return;
 
@@ -178,6 +186,7 @@ function formatDate(dateStr: string): string {
             :exercise="workoutExercise.exercise"
             :initial-sets="workoutExercise.sets"
             @sets-updated="updateExerciseSets(workoutExercise.exerciseId, $event)"
+            @delete-exercise="deleteExercise($event)"
           />
         </div>
 
