@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Plus, X } from 'lucide-vue-next';
 
 const router = useRouter();
 const showCalendar = ref(false);
-const pastDate = ref('');
+const dateInput = ref('');
 
 const openCalendar = () => {
   showCalendar.value = true;
@@ -13,12 +13,28 @@ const openCalendar = () => {
 
 const closeCalendar = () => {
   showCalendar.value = false;
+  dateInput.value = '';
 };
 
-const handleDateSelected = (date: string) => {
-  showCalendar.value = false;
-  router.push(`/my-workout-tracker/workout/${date}`);
+const handleDateSubmit = () => {
+  if (isValidDate.value) {
+    showCalendar.value = false;
+    router.push(`/my-workout-tracker/workout/${dateInput.value}`);
+  }
 };
+
+const isValidDate = computed(() => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!dateRegex.test(dateInput.value)) {
+    return false;
+  }
+  
+  const date = new Date(dateInput.value);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  return date.toISOString().split('T')[0] === dateInput.value && date <= today;
+});
 
 const handleModalClick = (event: MouseEvent) => {
   if (event.target === event.currentTarget) {
@@ -61,11 +77,19 @@ const handleKeydown = (event: KeyboardEvent) => {
             <p class="modal-description">
               Write a date to add a workout for that day.
             </p>
-            <div class="modal-input">
-              <input v-model="pastDate" placeholder="2025-01-01">
-              <button :disabled="!pastDate" @click="handleDateSelected(pastDate)" class="add-date-btn">
-                <Plus :size="18" />
-                Add workout
+            <div class="input-section">
+              <input 
+                v-model="dateInput"
+                type="text" 
+                placeholder="YYYY-MM-DD (e.g., 2025-01-01)"
+                class="date-input"
+              >
+              <button 
+                @click="handleDateSubmit" 
+                :disabled="!isValidDate"
+                class="add-date-btn"
+              >
+                Add Workout
               </button>
             </div>
           </div>
@@ -101,38 +125,53 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 }
 
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.date-input {
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  &::placeholder {
+    color: #9CA3AF;
+  }
+}
+
 .add-date-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.5rem;
+  padding: 0.75rem 1rem;
   background: #10B981;
   color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
-    background: #059669;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
   &:hover:not(:disabled) {
-    background: #F9FAFB;
-    border-color: #9CA3AF;
+    background: #059669;
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background: #9CA3AF;
   }
 }
 
@@ -200,12 +239,9 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 .modal-description {
   color: #6b7280;
+  margin: 0 0 1.5rem;
+  text-align: center;
   font-size: 0.875rem;
-}
-
-.modal-input {
-  display: flex;
-  gap: 0.5rem;
 }
 
 @keyframes modalSlideIn {
