@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { 
   CheckCircle, CircleMinus, Plus, Play 
 } from 'lucide-vue-next';
 import ExerciseCard from '@/components/ExerciseCard.vue';
 import SetTracker from '@/components/SetTracker.vue';
-import { mockExercises } from '@/services/graphql';
+import { mockExercises, getTranslatedExerciseCategory } from '@/services/graphql';
 import { WorkoutStorageService } from '@/services/storage';
 import type { Exercise, DailyWorkout, WorkoutExercise, WorkoutSet } from '@/types/workout';
 
@@ -15,6 +16,7 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const { t, locale } = useI18n();
 
 const date = computed(() => props.date || new Date().toISOString().split('T')[0]);
 const isToday = computed(() => date.value === new Date().toISOString().split('T')[0]);
@@ -127,11 +129,11 @@ const cancelWorkout = () => {
 };
 
 function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('en-US', { 
+  return new Date(dateStr).toLocaleDateString(locale.value, {
     weekday: 'long',
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   });
 }
 </script>
@@ -140,10 +142,11 @@ function formatDate(dateStr: string): string {
   <div class="workout-page">
     <header class="workout-page__header">
       <div class="workout-page__header-content">
-        <h1 class="workout-page__title">{{ isToday ? "Today's Workout" : `Workout - ${formatDate(date)}` }}</h1>
+        <h1 class="workout-page__title">
+          {{ isToday ? t('workout-page.title.today') : t('workout-page.title.date', { date: formatDate(date) }) }}
+        </h1>
         <p v-if="currentWorkout" class="workout-page__stats">
-          {{ currentWorkout.exercises.length }} exercises • 
-          {{ totalSets }} sets completed
+          {{ t('workout-page.stats.exercises-and-sets', { exerciseCount: currentWorkout.exercises.length, setCount: totalSets }) }}
         </p>
       </div>
 
@@ -154,7 +157,7 @@ function formatDate(dateStr: string): string {
           :disabled="!hasCompletedSets"
         >
           <CheckCircle :size="18" />
-          Finish Workout
+          {{ t('workout-page.buttons.finish-workout') }}
         </button>
         <button
           @click="cancelWorkout"
@@ -162,7 +165,7 @@ function formatDate(dateStr: string): string {
           :disabled="!hasCompletedSets"
         >
           <CircleMinus :size="18" />
-          Cancel Workout
+          {{ t('workout-page.buttons.cancel-workout') }}
         </button>
       </div>
     </header>
@@ -176,7 +179,7 @@ function formatDate(dateStr: string): string {
               :style="{ width: `${workoutProgress}%` }"
             ></div>
           </div>
-          <span class="workout-page__progress-text">{{ workoutProgress }}% Complete</span>
+          <span class="workout-page__progress-text">{{ t('workout-page.progress.complete', { percent: workoutProgress }) }}</span>
         </div>
 
         <div class="workout-page__trackers">
@@ -195,29 +198,31 @@ function formatDate(dateStr: string): string {
           class="workout-page__add-btn"
         >
           <Plus :size="18" />
-          Add Another Exercise
+          {{ t('workout-page.buttons.add-exercise') }}
         </button>
       </div>
 
       <div v-else class="workout-page__selection">
         <div class="workout-page__selection-header">
-          <h2 class="workout-page__selection-title">{{ currentWorkout?.exercises.length ? 'Add Exercise' : 'Choose Your Exercises' }}</h2>
-          <p class="workout-page__selection-subtitle">Select exercises for your workout</p>
+          <h2 class="workout-page__selection-title">
+            {{ currentWorkout?.exercises.length ? t('workout-page.selection.title.add') : t('workout-page.selection.title.choose') }}
+          </h2>
+          <p class="workout-page__selection-subtitle">{{ t('workout-page.selection.subtitle') }}</p>
         </div>
 
         <div class="workout-page__filters">
           <select v-model="selectedCategory" class="workout-page__filter">
-            <option value="">All Categories</option>
+            <option value="">{{ t('workout-page.filters.all-categories') }}</option>
             <option v-for="(category, index) in categories" :key="index" :value="category">
-              {{ category }}
+              {{ getTranslatedExerciseCategory(category, t) }}
             </option>
           </select>
           
           <select v-model="selectedDifficulty" class="workout-page__filter">
-            <option value="">All Difficulties</option>
-            <option value="beginner">Beginner</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
+            <option value="">{{ t('workout-page.filters.all-difficulties') }}</option>
+            <option value="beginner">{{ t('workout-page.filters.beginner') }}</option>
+            <option value="intermediate">{{ t('workout-page.filters.intermediate') }}</option>
+            <option value="advanced">{{ t('workout-page.filters.advanced') }}</option>
           </select>
         </div>
 
@@ -234,7 +239,7 @@ function formatDate(dateStr: string): string {
         <div v-if="selectedExercises.length > 0" class="workout-page__selection-actions">
           <button @click="startWorkout" class="workout-page__start-btn">
             <Play :size="18" />
-            Start Workout ({{ selectedExercises.length }} exercises)
+            {{ t('workout-page.buttons.start-workout', { count: selectedExercises.length }) }}
           </button>
         </div>
       </div>

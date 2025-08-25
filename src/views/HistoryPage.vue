@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Download, TrendingUp } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 import WorkoutChart from '@/components/WorkoutChart.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
 import AddWorkoutButton from '@/components/AddWorkoutButton.vue';
@@ -7,6 +8,8 @@ import { WorkoutStorageService } from '@/services/storage';
 import LoadingComp from '@/components/LoadingComp.vue';
 
 import { loading, error, allWorkouts } from '@/composables/fetchFirebaseDB';
+
+const { t } = useI18n();
 
 const exportData = async () => {
   const dataStr = await WorkoutStorageService.exportData();
@@ -25,39 +28,39 @@ const exportData = async () => {
   <div class="history-page">
     <header class="history-page__header">
       <div class="history-page__header-content">
-        <h1 class="history-page__title">Workout History</h1>
-        <p class="history-page__subtitle">Track your progress and achievements</p>
+        <h1 class="history-page__title">{{ t('history-page.title') }}</h1>
+        <p class="history-page__subtitle">{{ t('history-page.subtitle') }}</p>
       </div>
       <div class="history-page__header-actions">
         <AddWorkoutButton />
         <button @click="exportData" class="history-page__export-btn">
           <Download :size="18" />
-          Export Data
+          {{ t('history-page.export-btn') }}
         </button>
       </div>
     </header>
 
     <LoadingComp v-if="loading" />
     <p v-else-if="error" class="history-page__error">
-      An error occurred while fetching workouts. Please try again later.
+      {{ t('history-page.error') }}
     </p>
     <div v-else-if="allWorkouts.length > 0" class="history-page__content">
       <div class="history-page__charts">
         <WorkoutChart
           :workouts="allWorkouts"
-          title="Workout Volume Over Time"
+          :title="t('history-page.charts.volume-title')"
           type="volume"
         />
         
         <div class="history-page__charts-row">
           <WorkoutChart
             :workouts="allWorkouts"
-            title="Exercise Frequency"
+            :title="t('history-page.charts.frequency-title')"
             type="frequency"
           />
           <WorkoutChart
             :workouts="allWorkouts"
-            title="Total Sets Progress"
+            :title="t('history-page.charts.progress-title')"
             type="progress"
           />
         </div>
@@ -68,10 +71,10 @@ const exportData = async () => {
 
     <div v-else class="history-page__empty">
       <TrendingUp :size="64" class="history-page__empty-icon" />
-      <h2 class="history-page__empty-title">No Workout History Yet</h2>
-      <p class="history-page__empty-text">Start tracking your workouts to see your progress over time.</p>
+      <h2 class="history-page__empty-title">{{ t('history-page.empty.title') }}</h2>
+      <p class="history-page__empty-text">{{ t('history-page.empty.text') }}</p>
       <router-link to="//my-workout-tracker" class="history-page__start-btn">
-        Start Your First Workout
+        {{ t('history-page.empty.button') }}
       </router-link>
     </div>
   </div>

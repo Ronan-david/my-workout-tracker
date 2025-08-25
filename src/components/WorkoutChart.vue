@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { Line } from 'vue-chartjs';
+import { useI18n } from 'vue-i18n';
 import type { DailyWorkout } from '../types/workout';
 import {
   Chart as ChartJS,
@@ -32,6 +33,8 @@ const props = defineProps<{
   type: 'volume' | 'frequency' | 'progress';
 }>();
 
+const { t, locale } = useI18n();
+
 const selectedExercise = ref('bench press');
 const selectedPeriod = ref(30);
 
@@ -40,7 +43,20 @@ const chartData = ref<ChartData>({
   datasets: []
 });
 
-const chartOptions = {
+const getYAxisLabel = (): string => {
+  return t('workout-chart.axes.weight');
+};
+
+const getExerciseDisplayName = (exerciseKey: string): string => {
+  if (exerciseKey === 'bench press') {
+    return t('workout-chart.exercises.bench-press');
+  } else if (exerciseKey === 'deadlifts') {
+    return t('workout-chart.exercises.deadlifts');
+  }
+  return exerciseKey;
+};
+
+const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -58,7 +74,7 @@ const chartOptions = {
       display: true,
       title: {
         display: true,
-        text: 'Date'
+        text: t('workout-chart.axes.date')
       },
       grid: {
         color: '#F3F4F6'
@@ -81,7 +97,7 @@ const chartOptions = {
     axis: 'x' as const,
     intersect: false
   }
-};
+}));
 
 watch([() => props.workouts, selectedExercise], () => {
   updateChartData();
@@ -104,7 +120,9 @@ const updateChartData = () => {
 
   for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
     const dateStr = d.toISOString().split('T')[0];
-    labels.push(new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+    // Use locale-aware date formatting
+    const localeCode = locale.value === 'fr' ? 'fr-FR' : 'en-US';
+    labels.push(new Date(d).toLocaleDateString(localeCode, { month: 'short', day: 'numeric' }));
     
     const workout = filteredWorkouts.find(w => w.date === dateStr);
     let value = 0;
@@ -119,10 +137,12 @@ const updateChartData = () => {
     dataPoints.push(value);
   }
 
+  const exerciseDisplayName = getExerciseDisplayName(selectedExercise.value);
+  
   chartData.value = {
     labels,
     datasets: [{
-      label: `Weight Progression for ${selectedExercise.value}`,
+      label: t('workout-chart.chart-labels.weight-progression', { exercise: exerciseDisplayName }),
       data: dataPoints,
       borderColor: '#2563EB',
       backgroundColor: 'rgba(37, 99, 235, 0.1)',
@@ -137,10 +157,6 @@ const updateChartData = () => {
     }]
   };
 };
-
-function getYAxisLabel(): string {
-  return 'Weight (lbs/kg)';
-}
 </script>
 
 <template>
@@ -149,14 +165,14 @@ function getYAxisLabel(): string {
       <h3 class="workout-chart__title">{{ title }}</h3>
       <div class="workout-chart__controls">
         <select v-model="selectedExercise" @change="updateChartData" class="workout-chart__select workout-chart__select--exercise">
-          <option value="">Select Exercise</option>
-          <option value="bench press">Bench Press</option>
-          <option value="deadlifts">Deadlift</option>
+          <option value="">{{ t('workout-chart.select-exercise') }}</option>
+          <option value="bench press">{{ t('workout-chart.exercises.bench-press') }}</option>
+          <option value="deadlifts">{{ t('workout-chart.exercises.deadlifts') }}</option>
         </select>
         <select v-model="selectedPeriod" @change="updateChartData" class="workout-chart__select workout-chart__select--period">
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 90 days</option>
+          <option value="7">{{ t('workout-chart.periods.last-7-days') }}</option>
+          <option value="30">{{ t('workout-chart.periods.last-30-days') }}</option>
+          <option value="90">{{ t('workout-chart.periods.last-90-days') }}</option>
         </select>
       </div>
     </div>
@@ -168,8 +184,8 @@ function getYAxisLabel(): string {
         class="workout-chart__canvas"
       />
       <div v-else class="workout-chart__no-data">
-        <p v-if="!selectedExercise" class="workout-chart__message">Please select an exercise to view progression</p>
-        <p v-else class="workout-chart__message">No data available for the selected exercise and period</p>
+        <p v-if="!selectedExercise" class="workout-chart__message">{{ t('workout-chart.messages.select-exercise') }}</p>
+        <p v-else class="workout-chart__message">{{ t('workout-chart.messages.no-data') }}</p>
       </div>
     </div>
   </div>

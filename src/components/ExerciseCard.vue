@@ -1,7 +1,13 @@
 
 <script setup lang="ts">
 import { CheckCircle } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
 import type { Exercise } from '@/types/workout';
+import { 
+  getTranslatedExerciseDescription,
+  getTranslatedExerciseDifficulty,
+  getTranslatedMuscle 
+} from '@/services/graphql';
 
 defineProps<{
   exercise: Exercise;
@@ -11,6 +17,8 @@ defineProps<{
 defineEmits<{
   select: [exercise: Exercise];
 }>();
+
+const { t } = useI18n();
 </script>
 
 <template>
@@ -22,17 +30,17 @@ defineEmits<{
     <div class="exercise-card__header">
       <h3 class="exercise-card__name">{{ exercise.name }}</h3>
       <span class="exercise-card__difficulty" :class="`exercise-card__difficulty--${exercise.difficulty}`">
-        {{ exercise.difficulty }}
+        {{ getTranslatedExerciseDifficulty(exercise.difficulty, t) }}
       </span>
     </div>
-    <p class="exercise-card__description">{{ exercise.description }}</p>
+    <p class="exercise-card__description">{{ getTranslatedExerciseDescription(exercise.id, t) }}</p>
     <div class="exercise-card__muscles">
       <span 
         v-for="muscle in exercise.targetMuscles" 
         :key="muscle"
         class="exercise-card__muscle"
       >
-        {{ muscle }}
+        {{ getTranslatedMuscle(muscle, t) }}
       </span>
     </div>
     <div v-if="isSelected" class="exercise-card__indicator">

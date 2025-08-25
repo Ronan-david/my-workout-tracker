@@ -8,7 +8,15 @@
   "workout": {
     "title": "Entraînements récents",
     "exercise": "exercice | { count } exercices",
-    "set": "série | { count } séries"
+    "set": "série | { count } séries",
+    "status": {
+      "completed": "Terminé",
+      "in-progress": "En cours"
+    },
+    "date": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier"
+    }
   },
   "set-tracker": {
     "set": "Série",
@@ -32,5 +40,133 @@
   "empty-workout": {
     "message": "Aucun entraînement pour le moment. Commencez votre premier entraînement aujourd'hui !",
     "button": "Commencer votre premier entraînement"
+  },
+  "workout-chart": {
+    "select-exercise": "Sélectionner un exercice",
+    "select-exercise-placeholder": "Sélectionner un exercice",
+    "exercises": {
+      "bench-press": "Développé couché",
+      "deadlifts": "Soulevé de terre"
+    },
+    "periods": {
+      "last-7-days": "7 derniers jours",
+      "last-30-days": "30 derniers jours",
+      "last-90-days": "90 derniers jours"
+    },
+    "axes": {
+      "date": "Date",
+      "weight": "Poids (lbs/kg)"
+    },
+    "messages": {
+      "select-exercise": "Veuillez sélectionner un exercice pour voir la progression",
+      "no-data": "Aucune donnée disponible pour l'exercice et la période sélectionnés"
+    },
+    "chart-labels": {
+      "weight-progression": "Progression du poids pour {exercise}"
+    }
+  },
+  "history-page": {
+    "title": "Historique des entraînements",
+    "subtitle": "Suivez vos progrès et vos réussites",
+    "export-btn": "Exporter les données",
+    "error": "Une erreur s'est produite lors de la récupération des entraînements. Veuillez réessayer plus tard.",
+    "charts": {
+      "volume-title": "Volume d'entraînement au fil du temps",
+      "frequency-title": "Fréquence des exercices",
+      "progress-title": "Progrès du nombre total de séries"
+    },
+    "empty": {
+      "title": "Aucun historique d'entraînement pour le moment",
+      "text": "Commencez à suivre vos entraînements pour voir vos progrès au fil du temps.",
+      "button": "Commencer votre premier entraînement"
+    }
+  },
+  "exercises": {
+    "categories": {
+      "chest": "Pectoraux",
+      "full-body": "Corps entier",
+      "legs": "Jambes",
+      "back": "Dos",
+      "arm": "Bras",
+      "calves": "Mollets",
+      "triceps": "Triceps"
+    },
+    "descriptions": {
+      "bench-press": "Mouvement de poussée des pectoraux",
+      "deadlifts": "Exercice complet de la chaîne postérieure",
+      "sissy-squats": "Mouvement composé du bas du corps",
+      "seated-rows": "Exercice de tirage horizontal",
+      "biceps-curls": "Mouvement ciblé sur les biceps",
+      "calf-raises": "Exercice de renforcement des mollets",
+      "legs-extensions": "Exercice de renforcement des quadriceps",
+      "adductors": "Exercice de renforcement des adducteurs",
+      "squats": "Mouvement composé du bas du corps",
+      "dips": "Mouvement composé ciblé sur les triceps",
+      "lat-pulldowns": "Mouvement de tirage vertical",
+      "leg-press": "Exercice de jambes à la machine",
+      "push-ups": "Exercice classique au poids du corps pour les pectoraux",
+      "pull-ups": "Exercice de tirage du haut du corps"
+    },
+    "muscles": {
+      "chest": "Pectoraux",
+      "triceps": "Triceps",
+      "shoulders": "Épaules",
+      "hamstrings": "Ischio-jambiers",
+      "glutes": "Fessiers",
+      "erector-spinae": "Érecteurs du rachis",
+      "quadriceps": "Quadriceps",
+      "lats": "Grands dorsaux",
+      "rhomboids": "Rhomboïdes",
+      "rear-delts": "Deltoïdes postérieurs",
+      "biceps": "Biceps",
+      "calves": "Mollets",
+      "adductor": "Adducteur"
+    },
+    "difficulty": {
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    }
+  },
+  "workout-page": {
+    "title": {
+      "today": "Entraînement d'aujourd'hui",
+      "date": "Entraînement - {date}"
+    },
+    "stats": {
+      "exercises-and-sets": "{ exerciseCount } exercices • { setCount } séries terminées"
+    },
+    "buttons": {
+      "finish-workout": "Terminer l'entraînement",
+      "cancel-workout": "Annuler l'entraînement",
+      "add-exercise": "Ajouter un autre exercice",
+      "start-workout": "Commencer l'entraînement ({ count } exercices)"
+    },
+    "progress": {
+      "complete": "{ percent }% Terminé"
+    },
+    "selection": {
+      "title": {
+        "choose": "Choisissez vos exercices",
+        "add": "Ajouter un exercice"
+      },
+      "subtitle": "Sélectionnez les exercices pour votre entraînement"
+    },
+    "filters": {
+      "all-categories": "Toutes les catégories",
+      "all-difficulties": "Toutes les difficultés",
+      "beginner": "Débutant",
+      "intermediate": "Intermédiaire",
+      "advanced": "Avancé"
+    }
+  },
+  "dashboard-page": {
+    "title": "Workout Tracker",
+    "subtitle": "Suivez votre parcours fitness avec précision",
+    "buttons": {
+      "start-today": "Commencer l'entraînement",
+      "view-all": "Voir tous les entraînements"
+    },
+    "error": "Une erreur s'est produite lors de la récupération des entraînements. Veuillez réessayer plus tard."
   }
 }

@@ -8,7 +8,15 @@
   "workout": {
     "title": "Recent Workouts",
     "exercise": "exercise | { count } exercises",
-    "set": "set | { count } sets"
+    "set": "set | { count } sets",
+    "status": {
+      "completed": "Completed",
+      "in-progress": "In Progress"
+    },
+    "date": {
+      "today": "Today",
+      "yesterday": "Yesterday"
+    }
   },
   "set-tracker": {
     "set": "Set",
@@ -32,5 +40,133 @@
   "empty-workout": {
     "message": "No workouts yet. Start your first workout today!",
     "button": "Start Your First Workout"
+  },
+  "workout-chart": {
+    "select-exercise": "Select Exercise",
+    "select-exercise-placeholder": "Select Exercise",
+    "exercises": {
+      "bench-press": "Bench Press",
+      "deadlifts": "Deadlift"
+    },
+    "periods": {
+      "last-7-days": "Last 7 days",
+      "last-30-days": "Last 30 days",
+      "last-90-days": "Last 90 days"
+    },
+    "axes": {
+      "date": "Date",
+      "weight": "Weight (lbs/kg)"
+    },
+    "messages": {
+      "select-exercise": "Please select an exercise to view progression",
+      "no-data": "No data available for the selected exercise and period"
+    },
+    "chart-labels": {
+      "weight-progression": "Weight Progression for {exercise}"
+    }
+  },
+  "history-page": {
+    "title": "Workout History",
+    "subtitle": "Track your progress and achievements",
+    "export-btn": "Export Data",
+    "error": "An error occurred while fetching workouts. Please try again later.",
+    "charts": {
+      "volume-title": "Workout Volume Over Time",
+      "frequency-title": "Exercise Frequency",
+      "progress-title": "Total Sets Progress"
+    },
+    "empty": {
+      "title": "No Workout History Yet",
+      "text": "Start tracking your workouts to see your progress over time.",
+      "button": "Start Your First Workout"
+    }
+  },
+  "exercises": {
+    "categories": {
+      "chest": "Chest",
+      "full-body": "Full Body",
+      "legs": "Legs",
+      "back": "Back",
+      "arm": "Arms",
+      "calves": "Calves",
+      "triceps": "Triceps"
+    },
+    "descriptions": {
+      "bench-press": "Compound chest pressing movement",
+      "deadlifts": "Complete posterior chain exercise",
+      "sissy-squats": "Lower body compound movement",
+      "seated-rows": "Horizontal pulling exercise",
+      "biceps-curls": "Biceps focused movement",
+      "calf-raises": "Calf strengthening exercise",
+      "legs-extensions": "Quad strengthening exercise",
+      "adductors": "Adductor strengthening exercise",
+      "squats": "Lower body compound movement",
+      "dips": "Tricep focused compound movement",
+      "lat-pulldowns": "Vertical pulling movement",
+      "leg-press": "Machine-based leg exercise",
+      "push-ups": "Classic bodyweight chest exercise",
+      "pull-ups": "Upper body pulling exercise"
+    },
+    "muscles": {
+      "chest": "Chest",
+      "triceps": "Triceps",
+      "shoulders": "Shoulders",
+      "hamstrings": "Hamstrings",
+      "glutes": "Glutes",
+      "erector-spinae": "Erector Spinae",
+      "quadriceps": "Quadriceps",
+      "lats": "Lats",
+      "rhomboids": "Rhomboids",
+      "rear-delts": "Rear Delts",
+      "biceps": "Biceps",
+      "calves": "Calves",
+      "adductor": "Adductor"
+    },
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "workout-page": {
+    "title": {
+      "today": "Today's Workout",
+      "date": "Workout - {date}"
+    },
+    "stats": {
+      "exercises-and-sets": "{ exerciseCount } exercises • { setCount } sets completed"
+    },
+    "buttons": {
+      "finish-workout": "Finish Workout",
+      "cancel-workout": "Cancel Workout",
+      "add-exercise": "Add Another Exercise",
+      "start-workout": "Start Workout ({ count } exercises)"
+    },
+    "progress": {
+      "complete": "{ percent }% Complete"
+    },
+    "selection": {
+      "title": {
+        "choose": "Choose Your Exercises",
+        "add": "Add Exercise"
+      },
+      "subtitle": "Select exercises for your workout"
+    },
+    "filters": {
+      "all-categories": "All Categories",
+      "all-difficulties": "All Difficulties",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "dashboard-page": {
+    "title": "Workout Tracker",
+    "subtitle": "Track your fitness journey with precision",
+    "buttons": {
+      "start-today": "Start Today's Workout",
+      "view-all": "View All Workouts"
+    },
+    "error": "An error occurred while fetching workouts. Please try again later."
   }
 }

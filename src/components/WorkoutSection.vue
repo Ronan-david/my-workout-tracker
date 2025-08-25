@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import type { DailyWorkout } from '@/types/workout';
 import { computed, ref } from 'vue';
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
+import PaginationComp from './PaginationComp.vue';
 
 const { workouts } = defineProps<{
   workouts: DailyWorkout[];
 }>();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const currentPage = ref(1);
 const itemsPerPage = 10;
 
 const totalPages = computed(() => 
-  Math.ceil(workoutsInReversedDateOrder.value.length / itemsPerPage)
+  Math.ceil(workouts.length / itemsPerPage)
 );
 
 const workoutsInReversedDateOrder = computed(() => {
@@ -27,6 +27,10 @@ const paginatedWorkouts = computed(() => {
   return workoutsInReversedDateOrder.value.slice(start, end);
 });
 
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+};
+
 const formatDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   const today = new Date();
@@ -34,11 +38,12 @@ const formatDate = (dateStr: string): string => {
   yesterday.setDate(today.getDate() - 1);
   
   if (dateStr === today.toISOString().split('T')[0]) {
-    return 'Today';
+    return t('workout.date.today');
   } else if (dateStr === yesterday.toISOString().split('T')[0]) {
-    return 'Yesterday';
+    return t('workout.date.yesterday');
   } else {
-    return date.toLocaleDateString('en-US', { 
+    const localeCode = locale.value === 'fr' ? 'fr-FR' : 'en-US';
+    return date.toLocaleDateString(localeCode, { 
       weekday: 'long',
       year: 'numeric', 
       month: 'long', 
@@ -65,7 +70,7 @@ const getTotalSets = (workout: DailyWorkout): number => {
           <div class="workout-section__date">
             <h3 class="workout-section__date-text">{{ formatDate(workout.date) }}</h3>
             <span class="workout-section__status" :class="{ 'workout-section__status--completed': workout.completed }">
-              {{ workout.completed ? 'Completed' : 'In Progress' }}
+              {{ workout.completed ? t('workout.status.completed') : t('workout.status.in-progress') }}
             </span>
           </div>
           <div class="workout-section__stats">
@@ -98,54 +103,39 @@ const getTotalSets = (workout: DailyWorkout): number => {
       </div>
     </div>
 
-    <div v-if="totalPages > 1" class="workout-section__pagination">
-      <button 
-        @click="currentPage--" 
-        :disabled="currentPage <= 1"
-        class="workout-section__page-btn workout-section__page-btn--prev"
-      >
-        <ChevronLeft :size="16" />
-        Previous
-      </button>
-      
-      <span class="workout-section__page-info">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-      
-      <button 
-        @click="currentPage++" 
-        :disabled="currentPage >= totalPages"
-        class="workout-section__page-btn workout-section__page-btn--next"
-      >
-        Next
-        <ChevronRight :size="16" />
-      </button>
-    </div>
+    <PaginationComp 
+      v-if="totalPages > 1" 
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      @page-change="handlePageChange"
+    />
   </div>
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/variables' as *;
+
 .workout-section {
   &__title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #1F2937;
-    margin: 0 0 1.5rem;
+    font-size: $text-xl;
+    font-weight: $font-semibold;
+    color: $text-primary;
+    margin: 0 0 $space-6;
   }
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: $space-4;
+    margin-bottom: $space-8;
   }
 
   &__item {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease;
+    background: $bg-primary;
+    border-radius: $radius-lg;
+    padding: $space-6;
+    box-shadow: 0 2px 8px $shadow-light;
+    transition: $transition-transform;
 
     &:hover {
       transform: translateY(-2px);
@@ -156,27 +146,23 @@ const getTotalSets = (workout: DailyWorkout): number => {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #E5E7EB;
-  }
-
-  &__date {
-    // Container for date and status
+    margin-bottom: $space-4;
+    padding-bottom: $space-4;
+    border-bottom: 1px solid $gray-200;
   }
 
   &__date-text {
-    margin: 0 0 0.25rem;
-    color: #1F2937;
-    font-size: 1.125rem;
-    font-weight: 600;
+    margin: 0 0 $space-1;
+    color: $text-primary;
+    font-size: $text-lg;
+    font-weight: $font-semibold;
   }
 
   &__status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
+    font-size: $text-xs;
+    font-weight: $font-medium;
     background: #FEF3C7;
     color: #92400E;
 
@@ -188,89 +174,50 @@ const getTotalSets = (workout: DailyWorkout): number => {
 
   &__stats {
     display: flex;
-    gap: 1rem;
+    gap: $space-4;
   }
 
   &__stat {
-    color: #6B7280;
-    font-size: 0.875rem;
+    color: $text-muted;
+    font-size: $text-sm;
   }
 
   &__exercises {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  &__exercise {
-    // Container for each exercise
+    gap: $space-3;
   }
 
   &__exercise-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: $space-2;
   }
 
   &__exercise-name {
-    font-weight: 500;
-    color: #374151;
+    font-weight: $font-medium;
+    color: $text-secondary;
   }
 
   &__exercise-sets {
-    color: #6B7280;
-    font-size: 0.875rem;
+    color: $text-muted;
+    font-size: $text-sm;
   }
 
   &__exercise-details {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: $space-2;
   }
 
   &__set-detail {
-    background: #F3F4F6;
-    color: #374151;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-
-  &__pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  &__page-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 1rem;
-    background: white;
-    border: 1px solid #D1D5DB;
-    border-radius: 6px;
-    color: #374151;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &:hover:not(:disabled) {
-      background: #F9FAFB;
-      border-color: #9CA3AF;
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  }
-
-  &__page-info {
-    color: #6B7280;
-    font-size: 0.875rem;
+    background: $bg-muted;
+    color: $text-secondary;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    font-size: $text-xs;
+    font-weight: $font-medium;
   }
 }
 </style>
