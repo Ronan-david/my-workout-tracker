@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Plus, X } from 'lucide-vue-next';
 
 const router = useRouter();
+const { t } = useI18n();
 const showCalendar = ref(false);
 const dateInput = ref('');
 
@@ -53,10 +55,9 @@ const handleKeydown = (event: KeyboardEvent) => {
   <div class="add-workout-button">
     <button @click="openCalendar" class="add-workout-btn">
       <Plus :size="18" />
-      Add Past Workout
+      {{ t('add-workout.button') }}
     </button>
     
-    <!-- Modal Overlay -->
     <Teleport to="body">
       <div 
         v-if="showCalendar" 
@@ -67,7 +68,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       >
         <div class="modal-content">
           <div class="modal-header">
-            <h3>Select a Date</h3>
+            <h3>{{ t('add-workout.modal.title') }}</h3>
             <button @click="closeCalendar" class="close-button">
               <X :size="20" />
             </button>
@@ -75,13 +76,13 @@ const handleKeydown = (event: KeyboardEvent) => {
           
           <div class="modal-body">
             <p class="modal-description">
-              Write a date to add a workout for that day.
+              {{ t('add-workout.modal.description') }}
             </p>
             <div class="input-section">
               <input 
                 v-model="dateInput"
                 type="text" 
-                placeholder="YYYY-MM-DD (e.g., 2025-01-01)"
+                :placeholder="t('add-workout.modal.placeholder')"
                 class="date-input"
               >
               <button 
@@ -89,7 +90,7 @@ const handleKeydown = (event: KeyboardEvent) => {
                 :disabled="!isValidDate"
                 class="add-date-btn"
               >
-                Add Workout
+                {{ t('add-workout.modal.submit') }}
               </button>
             </div>
           </div>

@@ -18,5 +18,14 @@
     "completed-sets": "Completed Sets: { completed }/{ total }",
     "duplicate-set": "Duplicate Last Set",
     "add-set": "Add Another Set"
+  },
+  "add-workout": {
+    "button": "Add Past Workout",
+    "modal": {
+      "title": "Select a Date",
+      "description": "Write a date to add a workout for that day.",
+      "placeholder": "YYYY-MM-DD (e.g., 2025-01-01)",
+      "submit": "Add Workout"
+    }
   }
 }
