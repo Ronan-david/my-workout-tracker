@@ -138,19 +138,19 @@ function formatDate(dateStr: string): string {
 
 <template>
   <div class="workout-page">
-    <header class="workout-header">
-      <div class="workout-header-content">
-        <h1>{{ isToday ? "Today's Workout" : `Workout - ${formatDate(date)}` }}</h1>
-        <p v-if="currentWorkout">
+    <header class="workout-page__header">
+      <div class="workout-page__header-content">
+        <h1 class="workout-page__title">{{ isToday ? "Today's Workout" : `Workout - ${formatDate(date)}` }}</h1>
+        <p v-if="currentWorkout" class="workout-page__stats">
           {{ currentWorkout.exercises.length }} exercises • 
           {{ totalSets }} sets completed
         </p>
       </div>
 
-      <div v-if="currentWorkout && currentWorkout.exercises.length > 0" class="workout-header__buttons">
+      <div v-if="currentWorkout && currentWorkout.exercises.length > 0" class="workout-page__header-actions">
         <button 
           @click="finishWorkout"
-          class="workout-header__buttons--finish"
+          class="workout-page__action-btn workout-page__action-btn--finish"
           :disabled="!hasCompletedSets"
         >
           <CheckCircle :size="18" />
@@ -158,7 +158,7 @@ function formatDate(dateStr: string): string {
         </button>
         <button
           @click="cancelWorkout"
-          class="workout-header__buttons--cancel"
+          class="workout-page__action-btn workout-page__action-btn--cancel"
           :disabled="!hasCompletedSets"
         >
           <CircleMinus :size="18" />
@@ -167,19 +167,19 @@ function formatDate(dateStr: string): string {
       </div>
     </header>
 
-    <div class="workout-content">
-      <div v-if="!showExerciseSelection && currentWorkout?.exercises.length" class="active-workout">
-        <div class="workout-progress">
-          <div class="progress-bar">
+    <div class="workout-page__content">
+      <div v-if="!showExerciseSelection && currentWorkout?.exercises.length" class="workout-page__active">
+        <div class="workout-page__progress">
+          <div class="workout-page__progress-bar">
             <div 
-              class="progress-fill" 
+              class="workout-page__progress-fill" 
               :style="{ width: `${workoutProgress}%` }"
             ></div>
           </div>
-          <span class="progress-text">{{ workoutProgress }}% Complete</span>
+          <span class="workout-page__progress-text">{{ workoutProgress }}% Complete</span>
         </div>
 
-        <div class="exercise-trackers">
+        <div class="workout-page__trackers">
           <SetTracker
             v-for="workoutExercise in currentWorkout.exercises"
             :key="workoutExercise.exerciseId"
@@ -192,28 +192,28 @@ function formatDate(dateStr: string): string {
 
         <button 
           @click="showExerciseSelection = true"
-          class="add-exercise-btn"
+          class="workout-page__add-btn"
         >
           <Plus :size="18" />
           Add Another Exercise
         </button>
       </div>
 
-      <div v-else class="exercise-selection">
-        <div class="selection-header">
-          <h2>{{ currentWorkout?.exercises.length ? 'Add Exercise' : 'Choose Your Exercises' }}</h2>
-          <p>Select exercises for your workout</p>
+      <div v-else class="workout-page__selection">
+        <div class="workout-page__selection-header">
+          <h2 class="workout-page__selection-title">{{ currentWorkout?.exercises.length ? 'Add Exercise' : 'Choose Your Exercises' }}</h2>
+          <p class="workout-page__selection-subtitle">Select exercises for your workout</p>
         </div>
 
-        <div class="exercise-filters">
-          <select v-model="selectedCategory" class="filter-select">
+        <div class="workout-page__filters">
+          <select v-model="selectedCategory" class="workout-page__filter">
             <option value="">All Categories</option>
             <option v-for="(category, index) in categories" :key="index" :value="category">
               {{ category }}
             </option>
           </select>
           
-          <select v-model="selectedDifficulty" class="filter-select">
+          <select v-model="selectedDifficulty" class="workout-page__filter">
             <option value="">All Difficulties</option>
             <option value="beginner">Beginner</option>
             <option value="intermediate">Intermediate</option>
@@ -221,7 +221,7 @@ function formatDate(dateStr: string): string {
           </select>
         </div>
 
-        <div class="exercises-grid">
+        <div class="workout-page__exercises">
           <ExerciseCard
             v-for="exercise in filteredExercises"
             :key="exercise.id"
@@ -231,8 +231,8 @@ function formatDate(dateStr: string): string {
           />
         </div>
 
-        <div v-if="selectedExercises.length > 0" class="selection-actions">
-          <button @click="startWorkout" class="start-workout-btn">
+        <div v-if="selectedExercises.length > 0" class="workout-page__selection-actions">
+          <button @click="startWorkout" class="workout-page__start-btn">
             <Play :size="18" />
             Start Workout ({{ selectedExercises.length }} exercises)
           </button>
@@ -243,119 +243,81 @@ function formatDate(dateStr: string): string {
 </template>
 
 <style lang="scss" scoped>
-.workout {
-    &-page {
-      margin: 0 auto;
-      padding: 1rem;
-    }
+.workout-page {
+  margin: 0 auto;
+  padding: 1rem;
 
-    &-header {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      text-align: center;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      padding: 2rem;
-      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-      border-radius: 16px;
-      color: white;
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    border-radius: 16px;
+    color: white;
+  }
 
-      .header-content h1 {
-        font-size: 1.5rem;
-      }
+  &__header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+  }
 
-      &__buttons {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: center;
-        justify-content: center;
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
 
-        button {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 1rem 1.5rem;
-          background: white;
-          border: none;
-          border-radius: 12px;
-          font-weight: 600;
-          font-size: 0.875rem;
-          cursor: pointer;
-          transition: all 0.2s ease;
-
-          &:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-          }
-
-          &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-          }
-        }
-
-        &--finish {
-          color: #10B981;
-        }
-
-        &--cancel {
-          color: #db3113;
-        }
-      }
-    }
-
-    &-header-content {
-      h1 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin: 0 0 0.5rem;
-      }
-
-      p {
-        opacity: 0.9;
-        margin: 0;
-        font-size: 1rem;
-      }
-    }
-
-    &-progress {
-      flex-direction: row;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-      .progress-bar {
-        flex: 1;
-        height: 8px;
-        background: #E5E7EB;
-        border-radius: 4px;
-        overflow: hidden;
-
-        .progress-fill {
-          height: 100%;
-          background: linear-gradient(90deg, #10B981 0%, #059669 100%);
-          transition: width 0.3s ease;
-        }
-      }
-
-      .progress-text {
-        font-weight: 600;
-        color: #374151;
-        min-width: 80px;
-        text-align: right;
-      }
+    @media (min-width: 768px) {
+      font-size: 2rem;
     }
   }
 
-.workout {
-  &-progress {
+  &__stats {
+    opacity: 0.9;
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  &__action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--finish {
+      color: #10B981;
+    }
+
+    &--cancel {
+      color: #db3113;
+    }
+  }
+
+  &__progress {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -366,171 +328,175 @@ function formatDate(dateStr: string): string {
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-    .progress-bar {
-      flex: 1;
-      height: 8px;
-      background: #E5E7EB;
-      border-radius: 4px;
-      overflow: hidden;
-
-      .progress-fill {
-        height: 100%;
-        background: linear-gradient(90deg, #10B981 0%, #059669 100%);
-        transition: width 0.3s ease;
-      }
-    }
-
-    .progress-text {
-      font-weight: 600;
-      color: #374151;
-      min-width: 80px;
-      text-align: center;
-    }
   }
-}
 
-.exercise-filters {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  justify-content: center;
-}
-
-.exercises-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-.filter-select {
-  padding: 0.75rem 1rem;
-  border: 1px solid #D1D5DB;
-  border-radius: 8px;
-  background: white;
-  font-size: 0.875rem;
-  color: #374151;
-  min-width: 150px;
-
-  &:focus {
-    outline: none;
-    border-color: #2563EB;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-  }
-}
-
-
-.selection-actions {
-  position: sticky;
-  bottom: 2rem;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  text-align: center;
-}
-
-
-.add-exercise-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 1rem;
-  background: #F3F4F6;
-  color: #374151;
-  border: 2px dashed #D1D5DB;
-  border-radius: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
+  &__progress-bar {
+    flex: 1;
+    height: 8px;
     background: #E5E7EB;
-    border-color: #9CA3AF;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
   }
-}
 
-.start-workout-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: #2563EB;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+    transition: width 0.3s ease;
+  }
 
-  &:hover {
-    background: #1D4ED8;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+  &__progress-text {
+    font-weight: 600;
+    color: #374151;
+    min-width: 80px;
+    text-align: center;
+  }
+
+  &__trackers {
+    margin-bottom: 2rem;
+  }
+
+  &__add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background: #F3F4F6;
+    color: #374151;
+    border: 2px dashed #D1D5DB;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #E5E7EB;
+      border-color: #9CA3AF;
+    }
+  }
+
+  &__selection-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__selection-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 0 0 0.5rem;
+
+    @media (min-width: 768px) {
+      font-size: 1.875rem;
+    }
+  }
+
+  &__selection-subtitle {
+    color: #6B7280;
+    font-size: 1rem;
+    margin: 0;
+
+    @media (min-width: 768px) {
+      font-size: 1.125rem;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+  }
+
+  &__filter {
+    padding: 0.75rem 1rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.875rem;
+    color: #374151;
+    min-width: 150px;
+
+    &:focus {
+      outline: none;
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+  }
+
+  &__exercises {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  &__selection-actions {
+    position: sticky;
+    bottom: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    text-align: center;
+  }
+
+  &__start-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+    }
   }
 }
 
 @media (min-width: 768px) {
-  .workout {
-    &-page {
-      max-width: 1200px;
-      padding: 1rem;
-    }
+  .workout-page {
+    max-width: 1200px;
 
-    &-header {
+    &__header {
       flex-direction: row;
-
-      &__buttons {
-        flex-direction: row;
-      }
     }
 
-    &-progress {
+    &__header-actions {
+      flex-direction: row;
+    }
+
+    &__progress {
       flex-direction: row;
       align-items: center;
       gap: 1rem;
-
-      .progress-text {
-        text-align: right;
-      }
-    }
-  }
-
-  .exercise-trackers {
-    margin-bottom: 2rem;
-  }
-
-  .selection-header {
-    text-align: center;
-    margin-bottom: 2rem;
-
-    h2 {
-      font-size: 1.875rem;
-      font-weight: 700;
-      color: #1F2937;
-      margin: 0 0 0.5rem;
     }
 
-    p {
-      color: #6B7280;
-      font-size: 1.125rem;
-      margin: 0;
+    &__progress-text {
+      text-align: right;
     }
-  }
 
-  .exercise-filters {
-    flex-direction: row;
-  }
+    &__filters {
+      flex-direction: row;
+    }
 
-  .exercises-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    &__exercises {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
   }
 }
 </style>

@@ -102,7 +102,6 @@ const updateChartData = () => {
   const labels: string[] = [];
   const dataPoints: number[] = [];
 
-  // Generate date range
   for (let d = new Date(startDate); d <= now; d.setDate(d.getDate() + 1)) {
     const dateStr = d.toISOString().split('T')[0];
     labels.push(new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
@@ -113,7 +112,6 @@ const updateChartData = () => {
     if (workout) {
       const exercise = workout.exercises.find(ex => ex.exercise.name.toLowerCase() === selectedExercise.value.toLowerCase());
       if (exercise) {
-        // Get the maximum weight lifted in this session for this exercise
         value = Math.max(...exercise.sets.map(set => set.weight || 0));
       }
     }
@@ -146,121 +144,127 @@ function getYAxisLabel(): string {
 </script>
 
 <template>
-  <div class="chart-container">
-    <div class="chart-header">
-      <h3>{{ title }}</h3>
-      <div class="chart-controls">
-        <select v-model="selectedExercise" @change="updateChartData" class="exercise-select">
+  <div class="workout-chart">
+    <div class="workout-chart__header">
+      <h3 class="workout-chart__title">{{ title }}</h3>
+      <div class="workout-chart__controls">
+        <select v-model="selectedExercise" @change="updateChartData" class="workout-chart__select workout-chart__select--exercise">
           <option value="">Select Exercise</option>
           <option value="bench press">Bench Press</option>
           <option value="deadlifts">Deadlift</option>
         </select>
-        <select v-model="selectedPeriod" @change="updateChartData" class="period-select">
+        <select v-model="selectedPeriod" @change="updateChartData" class="workout-chart__select workout-chart__select--period">
           <option value="7">Last 7 days</option>
           <option value="30">Last 30 days</option>
           <option value="90">Last 90 days</option>
         </select>
       </div>
     </div>
-    <div class="chart-wrapper">
+    <div class="workout-chart__wrapper">
       <Line
         v-if="selectedExercise && chartData.datasets.length > 0"
         :data="chartData"
         :options="chartOptions"
+        class="workout-chart__canvas"
       />
-      <div v-else class="no-data-message">
-        <p v-if="!selectedExercise">Please select an exercise to view progression</p>
-        <p v-else>No data available for the selected exercise and period</p>
+      <div v-else class="workout-chart__no-data">
+        <p v-if="!selectedExercise" class="workout-chart__message">Please select an exercise to view progression</p>
+        <p v-else class="workout-chart__message">No data available for the selected exercise and period</p>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.chart-container {
+.workout-chart {
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2rem;
-}
 
-.chart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
 
-  h3 {
+  &__title {
     margin: 0;
     color: #1F2937;
     font-size: 1.25rem;
     font-weight: 600;
   }
-}
 
-.chart-controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.exercise-select,
-.period-select {
-  padding: 0.5rem;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
-  background: white;
-  font-size: 0.875rem;
-  color: #374151;
-  min-width: 150px;
-
-  &:focus {
-    outline: none;
-    border-color: #2563EB;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  &__controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
   }
-}
 
-.no-data-message {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  color: #6B7280;
-  font-size: 1rem;
+  &__select {
+    padding: 0.5rem;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    background: white;
+    font-size: 0.875rem;
+    color: #374151;
+    min-width: 150px;
 
-  p {
+    &:focus {
+      outline: none;
+      border-color: #2563EB;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+  }
+
+  &__wrapper {
+    height: 300px;
+    position: relative;
+  }
+
+  &__canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__no-data {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  &__message {
     margin: 0;
     text-align: center;
+    color: #6B7280;
+    font-size: 1rem;
   }
 }
 
-.chart-wrapper {
-  height: 300px;
-  position: relative;
-}
+@media (max-width: $bp-lg) {
+  .workout-chart {
+    &__header {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+    }
 
-@media (max-width: 768px) {
-  .chart-header {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
+    &__controls {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
-  .chart-controls {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
+    &__select {
+      min-width: auto;
+      width: 100%;
+    }
 
-  .exercise-select,
-  .period-select {
-    min-width: auto;
-    width: 100%;
-  }
-
-  .chart-wrapper {
-    height: 250px;
+    &__wrapper {
+      height: 250px;
+    }
   }
 }
 </style>

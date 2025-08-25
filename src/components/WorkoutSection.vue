@@ -53,42 +53,42 @@ const getTotalSets = (workout: DailyWorkout): number => {
 
 </script>
 <template>
-  <div class="workouts-section">
-    <h2>{{ t('workout.title') }}</h2>
-    <div class="workouts-list">
+  <div class="workout-section">
+    <h2 class="workout-section__title">{{ t('workout.title') }}</h2>
+    <div class="workout-section__list">
       <div 
         v-for="(workout, index) in paginatedWorkouts" 
         :key="index"
-        class="workout-item"
+        class="workout-section__item"
       >
-        <div class="workout-header">
-          <div class="workout-date">
-            <h3>{{ formatDate(workout.date) }}</h3>
-            <span class="workout-status" :class="{ completed: workout.completed }">
+        <div class="workout-section__header">
+          <div class="workout-section__date">
+            <h3 class="workout-section__date-text">{{ formatDate(workout.date) }}</h3>
+            <span class="workout-section__status" :class="{ 'workout-section__status--completed': workout.completed }">
               {{ workout.completed ? 'Completed' : 'In Progress' }}
             </span>
           </div>
-          <div class="workout-stats">
-            <span class="stat">{{ t('workout.exercise', { count: workout.exercises.length }) }}</span>
-            <span class="stat">{{ t('workout.set', { count: getTotalSets(workout) }) }}</span>
+          <div class="workout-section__stats">
+            <span class="workout-section__stat">{{ t('workout.exercise', { count: workout.exercises.length }) }}</span>
+            <span class="workout-section__stat">{{ t('workout.set', { count: getTotalSets(workout) }) }}</span>
           </div>
         </div>
         
-        <div class="workout-exercises">
+        <div class="workout-section__exercises">
           <div 
             v-for="exercise in workout.exercises" 
             :key="exercise.exerciseId"
-            class="exercise-summary"
+            class="workout-section__exercise"
           >
-            <div class="exercise-info">
-              <span class="exercise-name">{{ exercise.exercise.name }}</span>
-              <span class="exercise-sets">{{ t('workout.set', { count: exercise.sets.length }) }}</span>
+            <div class="workout-section__exercise-info">
+              <span class="workout-section__exercise-name">{{ exercise.exercise.name }}</span>
+              <span class="workout-section__exercise-sets">{{ t('workout.set', { count: exercise.sets.length }) }}</span>
             </div>
-            <div class="exercise-details">
+            <div class="workout-section__exercise-details">
               <span 
                 v-for="(set, sIndex) in exercise.sets" 
                 :key="sIndex"
-                class="set-detail"
+                class="workout-section__set-detail"
               >
                 {{ set.reps }}{{ set.weight ? ` × ${set.weight}kg` : '' }}{{ set.duration ? ` × ${set.duration}s` : '' }}
               </span>
@@ -98,24 +98,24 @@ const getTotalSets = (workout: DailyWorkout): number => {
       </div>
     </div>
 
-    <div v-if="totalPages > 1" class="pagination">
+    <div v-if="totalPages > 1" class="workout-section__pagination">
       <button 
         @click="currentPage--" 
         :disabled="currentPage <= 1"
-        class="page-btn"
+        class="workout-section__page-btn workout-section__page-btn--prev"
       >
         <ChevronLeft :size="16" />
         Previous
       </button>
       
-      <span class="page-info">
+      <span class="workout-section__page-info">
         Page {{ currentPage }} of {{ totalPages }}
       </span>
       
       <button 
         @click="currentPage++" 
         :disabled="currentPage >= totalPages"
-        class="page-btn"
+        class="workout-section__page-btn workout-section__page-btn--next"
       >
         Next
         <ChevronRight :size="16" />
@@ -125,148 +125,152 @@ const getTotalSets = (workout: DailyWorkout): number => {
 </template>
 
 <style lang="scss" scoped>
-.workouts-section {
-  h2 {
+.workout-section {
+  &__title {
     font-size: 1.5rem;
     font-weight: 600;
     color: #1F2937;
     margin: 0 0 1.5rem;
   }
-}
 
-.workouts-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.workout-item {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
   }
-}
 
-.workout-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #E5E7EB;
-}
+  &__item {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
 
-.workout-date {
-  h3 {
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  &__date {
+    // Container for date and status
+  }
+
+  &__date-text {
     margin: 0 0 0.25rem;
     color: #1F2937;
     font-size: 1.125rem;
     font-weight: 600;
   }
-}
 
-.workout-status {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background: #FEF3C7;
-  color: #92400E;
+  &__status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: #FEF3C7;
+    color: #92400E;
 
-  &.completed {
-    background: #D1FAE5;
-    color: #065F46;
+    &--completed {
+      background: #D1FAE5;
+      color: #065F46;
+    }
   }
-}
 
-.workout-stats {
-  display: flex;
-  gap: 1rem;
+  &__stats {
+    display: flex;
+    gap: 1rem;
+  }
 
-  .stat {
+  &__stat {
     color: #6B7280;
     font-size: 0.875rem;
   }
-}
 
-.workout-exercises {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
+  &__exercises {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
 
-.exercise-summary {
-  .exercise-info {
+  &__exercise {
+    // Container for each exercise
+  }
+
+  &__exercise-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 0.5rem;
-
-    .exercise-name {
-      font-weight: 500;
-      color: #374151;
-    }
-
-    .exercise-sets {
-      color: #6B7280;
-      font-size: 0.875rem;
-    }
   }
 
-  .exercise-details {
+  &__exercise-name {
+    font-weight: 500;
+    color: #374151;
+  }
+
+  &__exercise-sets {
+    color: #6B7280;
+    font-size: 0.875rem;
+  }
+
+  &__exercise-details {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
 
-    .set-detail {
-      background: #F3F4F6;
-      color: #374151;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 500;
+  &__set-detail {
+    background: #F3F4F6;
+    color: #374151;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  &__pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__page-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid #D1D5DB;
+    border-radius: 6px;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #F9FAFB;
+      border-color: #9CA3AF;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
-}
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-}
-
-.page-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  background: white;
-  border: 1px solid #D1D5DB;
-  border-radius: 6px;
-  color: #374151;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover:not(:disabled) {
-    background: #F9FAFB;
-    border-color: #9CA3AF;
+  &__page-info {
+    color: #6B7280;
+    font-size: 0.875rem;
   }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.page-info {
-  color: #6B7280;
-  font-size: 0.875rem;
 }
 </style>

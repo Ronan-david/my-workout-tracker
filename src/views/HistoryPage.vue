@@ -23,14 +23,14 @@ const exportData = async () => {
 
 <template>
   <div class="history-page">
-    <header class="history-header">
-      <div class="header-content">
-        <h1>Workout History</h1>
-        <p>Track your progress and achievements</p>
+    <header class="history-page__header">
+      <div class="history-page__header-content">
+        <h1 class="history-page__title">Workout History</h1>
+        <p class="history-page__subtitle">Track your progress and achievements</p>
       </div>
-      <div class="header-actions">
+      <div class="history-page__header-actions">
         <AddWorkoutButton />
-        <button @click="exportData" class="export-btn">
+        <button @click="exportData" class="history-page__export-btn">
           <Download :size="18" />
           Export Data
         </button>
@@ -38,18 +38,18 @@ const exportData = async () => {
     </header>
 
     <LoadingComp v-if="loading" />
-    <p v-else-if="error" class="error-message">
+    <p v-else-if="error" class="history-page__error">
       An error occurred while fetching workouts. Please try again later.
     </p>
-    <div v-else-if="allWorkouts.length > 0" class="history-content">
-      <div class="charts-section">
+    <div v-else-if="allWorkouts.length > 0" class="history-page__content">
+      <div class="history-page__charts">
         <WorkoutChart
           :workouts="allWorkouts"
           title="Workout Volume Over Time"
           type="volume"
         />
         
-        <div class="charts-row">
+        <div class="history-page__charts-row">
           <WorkoutChart
             :workouts="allWorkouts"
             title="Exercise Frequency"
@@ -66,11 +66,11 @@ const exportData = async () => {
       <WorkoutSection :workouts="allWorkouts" />
     </div>
 
-    <div v-else class="empty-history">
-      <TrendingUp :size="64" class="empty-icon" />
-      <h2>No Workout History Yet</h2>
-      <p>Start tracking your workouts to see your progress over time.</p>
-      <router-link to="//my-workout-tracker" class="start-tracking-btn">
+    <div v-else class="history-page__empty">
+      <TrendingUp :size="64" class="history-page__empty-icon" />
+      <h2 class="history-page__empty-title">No Workout History Yet</h2>
+      <p class="history-page__empty-text">Start tracking your workouts to see your progress over time.</p>
+      <router-link to="//my-workout-tracker" class="history-page__start-btn">
         Start Your First Workout
       </router-link>
     </div>
@@ -82,144 +82,132 @@ const exportData = async () => {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-}
 
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
-  border-radius: 16px;
-  color: white;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%);
+    border-radius: 16px;
+    color: white;
+  }
 
-  .header-content {
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      margin: 0 0 0.5rem;
-    }
+  &__header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
 
-    p {
-      font-size: 1.125rem;
-      opacity: 0.9;
-      margin: 0;
+  &__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  &__export-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    color: #7C3AED;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     }
   }
-}
 
-.header-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.export-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 1.5rem;
-  background: white;
-  color: #7C3AED;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  &__charts {
+    margin-bottom: 3rem;
   }
-}
 
-.charts-section {
-  margin-bottom: 3rem;
-}
+  &__charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
 
-.charts-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
+  &__empty {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #6B7280;
+  }
 
-.empty-history {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: #6B7280;
-
-  .empty-icon {
+  &__empty-icon {
     margin-bottom: 1.5rem;
     opacity: 0.5;
   }
 
-  h2 {
+  &__empty-title {
     margin: 0 0 1rem;
     color: #374151;
     font-size: 1.5rem;
   }
 
-  p {
+  &__empty-text {
     margin: 0 0 2rem;
     font-size: 1.125rem;
   }
-}
 
-.start-tracking-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: #2563EB;
-  color: white;
-  text-decoration: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  &__start-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #2563EB;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.2s ease;
 
-  &:hover {
-    background: #1D4ED8;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
-  }
-}
-
-@media (max-width: 768px) {
-  .history-page {
-    padding: 1rem;
-  }
-
-  .history-header {
-    flex-direction: column;
-    gap: 1.5rem;
-    text-align: center;
-
-    .header-content h1 {
-      font-size: 2rem;
+    &:hover {
+      background: #1D4ED8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
     }
   }
+}
 
-  .header-actions {
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-  }
+@media (max-width: $bp-lg) {
+  .history-page {
+    padding: 1rem;
 
-  .charts-row {
-    grid-template-columns: 1fr;
-  }
+    &__header {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
 
-  .workout-header {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
+    &__title {
+      font-size: 2rem;
+    }
 
-  .workout-stats {
-    justify-content: space-between;
+    &__header-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    &__charts-row {
+      grid-template-columns: 1fr;
+    }
   }
 }
 </style>

@@ -109,8 +109,7 @@ const handleKeydown = (event: KeyboardEvent) => {
     align-items: center;
     gap: 0.5rem;
     padding: 1rem 1.5rem;
-    background: $primary-green;
-    color: $white;
+    color: $primary-blue;
     border: none;
     border-radius: $border-radius-lg;
     font-weight: 600;

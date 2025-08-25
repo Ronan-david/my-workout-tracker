@@ -10,7 +10,7 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
 </script>
 
 <template>
-  <nav class="nav--main">
+  <nav class="nav__main">
     <div class="nav__container">
       <router-link to="/my-workout-tracker" class="nav__brand">
         <Dumbbell :size="24" />
@@ -58,7 +58,7 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
 @use '@/assets/scss/variables' as *;
 
 .nav {
-  &--main {
+  &__main {
     background: $white;
     box-shadow: 0 2px 8px $shadow-light;
     position: sticky;
