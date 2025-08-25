@@ -100,148 +100,162 @@ const handleKeydown = (event: KeyboardEvent) => {
 </template>
 
 <style lang="scss" scoped>
-.add-workout-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 1.5rem;
-  background: #10B981;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+@use '@/assets/scss/variables' as *;
 
-  &:hover {
-    background: #059669;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
-  }
+.add-workout {
+  &-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: $primary-green;
+    color: $white;
+    border: none;
+    border-radius: $border-radius-lg;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: $transition-default;
 
-  &:active {
-    transform: translateY(0);
-  }
-}
+    &:hover {
+      background: $primary-green-hover;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px $shadow-green;
+    }
 
-.input-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.date-input {
-  padding: 0.75rem;
-  border: 1px solid #D1D5DB;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  transition: border-color 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #2563EB;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-  }
-
-  &::placeholder {
-    color: #9CA3AF;
+    &:active {
+      transform: translateY(0);
+    }
   }
 }
 
-.add-date-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: #10B981;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover:not(:disabled) {
-    background: #059669;
+.modal {
+  &-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: $shadow-overlay;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: $z-modal;
+    padding: 1rem;
   }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: #9CA3AF;
+  &-content {
+    background: $white;
+    border-radius: $border-radius-xl;
+    max-width: 400px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideIn 0.3s ease;
   }
-}
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
-}
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 1.5rem 0;
+    margin-bottom: 1rem;
 
-.modal-content {
-  background: white;
-  border-radius: 16px;
-  max-width: 400px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: modalSlideIn 0.3s ease;
-}
+    h3 {
+      margin: 0;
+      color: $gray-900;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+  }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 1.5rem 0;
-  margin-bottom: 1rem;
-}
+  &-body {
+    padding: 0 1.5rem 1.5rem;
+  }
 
-.modal-header h3 {
-  margin: 0;
-  color: #1f2937;
-  font-size: 1.25rem;
-  font-weight: 600;
-}
-
-.close-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: #f3f4f6;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #6b7280;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: #e5e7eb;
-    color: #374151;
+  &-description {
+    color: $gray-500;
+    margin: 0 0 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
   }
 }
 
-.modal-body {
-  padding: 0 1.5rem 1.5rem;
+.close {
+  &-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: $gray-100;
+    border-radius: $border-radius-sm;
+    cursor: pointer;
+    color: $gray-500;
+    transition: $transition-default;
+
+    &:hover {
+      background: $gray-200;
+      color: $gray-700;
+    }
+  }
 }
 
-.modal-description {
-  color: #6b7280;
-  margin: 0 0 1.5rem;
-  text-align: center;
-  font-size: 0.875rem;
+.input {
+  &-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.date {
+  &-input {
+    padding: 0.75rem;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius-sm;
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 3px $shadow-blue;
+    }
+
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+}
+
+.add-date {
+  &-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: $primary-green;
+    color: $white;
+    border: none;
+    border-radius: $border-radius-sm;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: $transition-default;
+
+    &:hover:not(:disabled) {
+      background: $primary-green-hover;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: $gray-400;
+    }
+  }
 }
 
 @keyframes modalSlideIn {
@@ -255,26 +269,30 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 }
 
-@media (max-width: 768px) {
-  .modal-overlay {
-    padding: 0.5rem;
+@media (max-width: $mobile-breakpoint) {
+  .modal {
+    &-overlay {
+      padding: 0.5rem;
+    }
+
+    &-content {
+      max-height: 95vh;
+    }
+
+    &-header {
+      padding: 1rem 1rem 0;
+    }
+
+    &-body {
+      padding: 0 1rem 1rem;
+    }
   }
-  
-  .modal-content {
-    max-height: 95vh;
-  }
-  
-  .modal-header {
-    padding: 1rem 1rem 0;
-  }
-  
-  .modal-body {
-    padding: 0 1rem 1rem;
-  }
-  
-  .add-workout-btn {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.8rem;
+
+  .add-workout {
+    &-btn {
+      padding: 0.875rem 1.25rem;
+      font-size: 0.8rem;
+    }
   }
 }
 </style>

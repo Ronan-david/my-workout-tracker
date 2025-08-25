@@ -1,0 +1,154 @@
+// Breakpoint Values
+$bp-xs: 480px;
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+$bp-2xl: 1536px;
+
+// Legacy breakpoint variables (for backward compatibility)
+$mobile-breakpoint: $bp-md;
+$tablet-breakpoint: $bp-lg;
+$desktop-breakpoint: $bp-xl;
+
+// Media Query Mixins
+@mixin mobile-up {
+  @media (min-width: $bp-xs) {
+    @content;
+  }
+}
+
+@mixin tablet-up {
+  @media (min-width: $bp-sm) {
+    @content;
+  }
+}
+
+@mixin desktop-up {
+  @media (min-width: $bp-md) {
+    @content;
+  }
+}
+
+@mixin large-up {
+  @media (min-width: $bp-lg) {
+    @content;
+  }
+}
+
+@mixin xl-up {
+  @media (min-width: $bp-xl) {
+    @content;
+  }
+}
+
+@mixin xxl-up {
+  @media (min-width: $bp-2xl) {
+    @content;
+  }
+}
+
+// Mobile-first approach (down)
+@mixin mobile-down {
+  @media (max-width: #{$bp-xs - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-down {
+  @media (max-width: #{$bp-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop-down {
+  @media (max-width: #{$bp-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin large-down {
+  @media (max-width: #{$bp-lg - 1px}) {
+    @content;
+  }
+}
+
+@mixin xl-down {
+  @media (max-width: #{$bp-xl - 1px}) {
+    @content;
+  }
+}
+
+@mixin xxl-down {
+  @media (max-width: #{$bp-2xl - 1px}) {
+    @content;
+  }
+}
+
+// Range mixins
+@mixin mobile-only {
+  @media (min-width: $bp-xs) and (max-width: #{$bp-sm - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @media (min-width: $bp-sm) and (max-width: #{$bp-md - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @media (min-width: $bp-md) and (max-width: #{$bp-lg - 1px}) {
+    @content;
+  }
+}
+
+// Custom breakpoint mixin
+@mixin breakpoint($size) {
+  @media (min-width: $size) {
+    @content;
+  }
+}
+
+@mixin max-breakpoint($size) {
+  @media (max-width: #{$size - 1px}) {
+    @content;
+  }
+}
+
+// Container widths
+$container-xs: 100%;
+$container-sm: 540px;
+$container-md: 720px;
+$container-lg: 960px;
+$container-xl: 1140px;
+$container-2xl: 1320px;
+
+// Common responsive utilities
+@mixin container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 $space-4;
+  
+  @include tablet-up {
+    max-width: $container-sm;
+  }
+  
+  @include desktop-up {
+    max-width: $container-md;
+    padding: 0 $space-6;
+  }
+  
+  @include large-up {
+    max-width: $container-lg;
+  }
+  
+  @include xl-up {
+    max-width: $container-xl;
+  }
+  
+  @include xxl-up {
+    max-width: $container-2xl;
+  }
+}

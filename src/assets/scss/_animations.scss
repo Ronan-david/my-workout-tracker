@@ -1,0 +1,129 @@
+// Transition Durations
+$duration-fast: 150ms;
+$duration-normal: 200ms;
+$duration-default: 300ms;
+$duration-slow: 500ms;
+
+// Transition Timing Functions
+$ease-linear: linear;
+$ease-in: ease-in;
+$ease-out: ease-out;
+$ease-in-out: ease-in-out;
+$ease-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$ease-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+// Common Transitions
+$transition-fast: all $duration-fast $ease-in-out;
+$transition-default: all $duration-normal $ease-in-out;
+$transition-slow: all $duration-slow $ease-in-out;
+$transition-colors: color $duration-normal $ease-in-out, 
+                   background-color $duration-normal $ease-in-out, 
+                   border-color $duration-normal $ease-in-out;
+$transition-transform: transform $duration-normal $ease-in-out;
+$transition-opacity: opacity $duration-normal $ease-in-out;
+$transition-shadow: box-shadow $duration-normal $ease-in-out;
+
+// Legacy transition variable (for backward compatibility)
+$transition-default-old: all 0.2s ease;
+
+// Animation Keyframes (as mixins for reusability)
+@mixin fadeIn($duration: $duration-default) {
+  animation: fadeIn $duration $ease-in-out;
+}
+
+@mixin fadeOut($duration: $duration-default) {
+  animation: fadeOut $duration $ease-in-out;
+}
+
+@mixin slideUp($duration: $duration-default) {
+  animation: slideUp $duration $ease-out;
+}
+
+@mixin slideDown($duration: $duration-default) {
+  animation: slideDown $duration $ease-out;
+}
+
+@mixin bounce($duration: $duration-slow) {
+  animation: bounce $duration $ease-back;
+}
+
+@mixin pulse($duration: 2s) {
+  animation: pulse $duration $ease-in-out infinite;
+}
+
+@mixin spin() {
+  animation: spin 2s linear infinite;
+}
+
+// Keyframe Definitions
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  from {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform:rotate(0deg);
+  }
+  to {
+    transform:rotate(360deg);
+  }
+}
