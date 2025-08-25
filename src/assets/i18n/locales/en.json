@@ -28,5 +28,9 @@
       "placeholder": "YYYY-MM-DD (e.g., 2025-01-01)",
       "submit": "Add Workout"
     }
+  },
+  "empty-workout": {
+    "message": "No workouts yet. Start your first workout today!",
+    "button": "Start Your First Workout"
   }
 }

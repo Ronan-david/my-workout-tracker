@@ -28,5 +28,9 @@
       "placeholder": "AAAA-MM-JJ (ex : 2025-01-01)",
       "submit": "Ajouter l'entraînement"
     }
+  },
+  "empty-workout": {
+    "message": "Aucun entraînement pour le moment. Commencez votre premier entraînement aujourd'hui !",
+    "button": "Commencer votre premier entraînement"
   }
 }
