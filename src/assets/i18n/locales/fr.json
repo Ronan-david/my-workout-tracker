@@ -1,0 +1,32 @@
+{
+  "nav": {
+    "dashboard": "Tableau de bord",
+    "workout": "Entraînement",
+    "history": "Historique",
+    "language": "Langue"
+  },
+  "workout": {
+    "title": "Entraînements récents",
+    "exercise": "exercice | { count } exercices",
+    "set": "série | { count } séries"
+  },
+  "set-tracker": {
+    "set": "Série",
+    "reps": "Répétitions",
+    "weight": "Poids (kg)",
+    "select-reps": "Sélectionnez les répétitions",
+    "select-weights": "Sélectionnez le poids",
+    "completed-sets": "Séries terminées : { completed }/{ total }",
+    "duplicate-set": "Dupliquer la dernière série",
+    "add-set": "Ajouter une autre série"
+  },
+  "add-workout": {
+    "button": "Ajouter un entraînement passé",
+    "modal": {
+      "title": "Sélectionner une date",
+      "description": "Écrivez une date pour ajouter un entraînement ce jour-là.",
+      "placeholder": "AAAA-MM-JJ (ex : 2025-01-01)",
+      "submit": "Ajouter l'entraînement"
+    }
+  }
+}

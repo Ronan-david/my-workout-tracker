@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Dumbbell, Home, Play, BarChart3 } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
+import LanguageSelector from '@/components/LanguageSelector.vue';
 
 const { t } = useI18n();
 
@@ -9,125 +10,159 @@ const today = computed(() => new Date().toISOString().split('T')[0]);
 </script>
 
 <template>
-  <nav class="main-nav">
-    <div class="nav-container">
-      <router-link to="/my-workout-tracker" class="nav-brand">
+  <nav class="nav--main">
+    <div class="nav__container">
+      <router-link to="/my-workout-tracker" class="nav__brand">
         <Dumbbell :size="24" />
-        <span>FitTracker</span>
+        <span class="nav__title">FitTracker</span>
       </router-link>
       
-      <div class="nav-links">
-        <router-link 
-          to="/my-workout-tracker" 
-          class="nav-link"
-          active-class="active"
-          exact
-        >
-          <Home :size="18" />
-          <span>{{ t('nav.dashboard') }}</span>
-        </router-link>
+      <div class="nav__actions">
+        <div class="nav__links">
+          <router-link 
+            to="/my-workout-tracker" 
+            class="nav__link"
+            active-class="nav__link--active"
+            exact
+          >
+            <Home :size="18" />
+            <span>{{ t('nav.dashboard') }}</span>
+          </router-link>
+          
+          <router-link 
+            :to="`/my-workout-tracker/workout/${today}`" 
+            class="nav__link"
+            active-class="nav__link--active"
+          >
+            <Play :size="18" />
+            <span>{{ t('nav.workout') }}</span>
+          </router-link>
+          
+          <router-link 
+            to="/my-workout-tracker/history" 
+            class="nav__link"
+            active-class="nav__link--active"
+          >
+            <BarChart3 :size="18" />
+            <span>{{ t('nav.history') }}</span>
+          </router-link>
+        </div>
         
-        <router-link 
-          :to="`/my-workout-tracker/workout/${today}`" 
-          class="nav-link"
-          active-class="active"
-        >
-          <Play :size="18" />
-          <span>{{ t('nav.workout') }}</span>
-        </router-link>
-        
-        <router-link 
-          to="/my-workout-tracker/history" 
-          class="nav-link"
-          active-class="active"
-        >
-          <BarChart3 :size="18" />
-          <span>{{ t('nav.history') }}</span>
-        </router-link>
+        <LanguageSelector />
       </div>
     </div>
   </nav>
 </template>
 
 <style lang="scss" scoped>
-.main-nav {
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+@use '@/assets/scss/variables' as *;
 
-.nav-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 4rem;
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  color: #2563EB;
-  font-weight: 700;
-  font-size: 1.25rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #1D4ED8;
-  }
-}
-
-.nav-links {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  text-decoration: none;
-  color: #6B7280;
-  font-weight: 500;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: #374151;
-    background: #F9FAFB;
+.nav {
+  &--main {
+    background: $white;
+    box-shadow: 0 2px 8px $shadow-light;
+    position: sticky;
+    top: 0;
+    z-index: $z-sticky;
   }
 
-  &.active {
-    color: #2563EB;
-    background: #EBF4FF;
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $space-4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: $space-16;
   }
 
-  span {
-    font-size: 0.875rem;
-  }
-}
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    text-decoration: none;
+    color: $primary-blue;
+    font-weight: $font-bold;
+    font-size: $text-lg;
+    transition: $transition-default;
 
-@media (max-width: 768px) {
-  .nav-container {
-    padding: 0 1rem;
+    &:hover {
+      color: $primary-blue-hover;
+    }
   }
 
-  .nav-links {
-    gap: 0.25rem;
+  &__title {
+    display : none;
   }
 
-  .nav-link {
-    padding: 0.5rem 0.75rem;
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  &__links {
+    display: flex;
+    gap: $space-1;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    text-decoration: none;
+    color: $gray-500;
+    font-weight: $font-medium;
+    border-radius: $radius-md;
+    transition: $transition-default;
+
+    &:hover {
+      color: $gray-700;
+      background: $gray-50;
+    }
+
+    &--active {
+      color: $primary-blue;
+      background: $shadow-blue;
+    }
 
     span {
+      font-size: $text-xs;
       display: none;
+    }
+  }
+}
+
+@media (min-width: $tablet-breakpoint) {
+  .nav {
+    &__container {
+      padding: 0 $space-8;
+    }
+
+    &__brand {
+      font-size: $text-xl;
+    }
+
+    &__title {
+      display : inline;
+    }
+
+    &__actions {
+      gap: $space-4;
+    }
+
+    &__links {
+      gap: $space-2;
+    }
+
+    &__link {
+      padding: $space-3 $space-4;
+
+      span {
+        display: inline;
+        font-size: $text-sm;
+      }
     }
   }
 }

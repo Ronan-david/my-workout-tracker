@@ -2,7 +2,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "workout": "Workout",
-    "history": "History"
+    "history": "History",
+    "language": "Language"
   },
   "workout": {
     "title": "Recent Workouts",
