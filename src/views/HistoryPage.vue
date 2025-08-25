@@ -2,6 +2,7 @@
 import { Download, TrendingUp } from 'lucide-vue-next';
 import WorkoutChart from '@/components/WorkoutChart.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
+import AddWorkoutButton from '@/components/AddWorkoutButton.vue';
 import { WorkoutStorageService } from '@/services/storage';
 import LoadingComp from '@/components/LoadingComp.vue';
 
@@ -28,6 +29,7 @@ const exportData = async () => {
         <p>Track your progress and achievements</p>
       </div>
       <div class="header-actions">
+        <AddWorkoutButton />
         <button @click="exportData" class="export-btn">
           <Download :size="18" />
           Export Data
@@ -105,6 +107,12 @@ const exportData = async () => {
       margin: 0;
     }
   }
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .export-btn {
@@ -192,6 +200,12 @@ const exportData = async () => {
     .header-content h1 {
       font-size: 2rem;
     }
+  }
+
+  .header-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
   }
 
   .charts-row {
