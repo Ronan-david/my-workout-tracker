@@ -27,6 +27,7 @@ const currentWorkout = ref<DailyWorkout | null>(null);
 const showExerciseSelection = ref(true);
 const selectedCategory = ref('');
 const selectedDifficulty = ref('');
+const showFavoritesOnly = ref(false);
 
 const categories = computed(() => 
   [...new Set(exercises.value.map(e => e.category))]
@@ -36,7 +37,8 @@ const filteredExercises = computed(() => {
   return exercises.value.filter(exercise => {
     const categoryMatch = !selectedCategory.value || exercise.category === selectedCategory.value;
     const difficultyMatch = !selectedDifficulty.value || exercise.difficulty === selectedDifficulty.value;
-    return categoryMatch && difficultyMatch;
+    const favoritesMatch = !showFavoritesOnly.value || exercise.favorites;
+    return categoryMatch && difficultyMatch && favoritesMatch;
   });
 });
 
@@ -224,6 +226,15 @@ function formatDate(dateStr: string): string {
             <option value="intermediate">{{ t('workout-page.filters.intermediate') }}</option>
             <option value="advanced">{{ t('workout-page.filters.advanced') }}</option>
           </select>
+          
+          <label class="workout-page__favorites-filter">
+            <input 
+              type="checkbox" 
+              v-model="showFavoritesOnly" 
+              class="workout-page__favorites-checkbox"
+            />
+            <span class="workout-page__favorites-label">Show favorites only</span>
+          </label>
         </div>
 
         <div class="workout-page__exercises">
@@ -248,6 +259,8 @@ function formatDate(dateStr: string): string {
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/variables' as *;
+
 .workout-page {
   margin: 0 auto;
   padding: 1rem;
@@ -261,9 +274,9 @@ function formatDate(dateStr: string): string {
     align-items: center;
     margin-bottom: 2rem;
     padding: 2rem;
-    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-    border-radius: 16px;
-    color: white;
+    background: linear-gradient(135deg, $primary-green 0%, $primary-green-hover 100%);
+    border-radius: $radius-xl;
+    color: $white;
   }
 
   &__header-actions {
@@ -295,9 +308,9 @@ function formatDate(dateStr: string): string {
     align-items: center;
     gap: 0.5rem;
     padding: 1rem 1.5rem;
-    background: white;
+    background: $white;
     border: none;
-    border-radius: 12px;
+    border-radius: $radius-lg;
     font-weight: 600;
     font-size: 0.875rem;
     cursor: pointer;
@@ -314,11 +327,11 @@ function formatDate(dateStr: string): string {
     }
 
     &--finish {
-      color: #10B981;
+      color: $success;
     }
 
     &--cancel {
-      color: #db3113;
+      color: $error;
     }
   }
 
@@ -330,29 +343,29 @@ function formatDate(dateStr: string): string {
     gap: 1rem;
     margin-bottom: 2rem;
     padding: 1.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: $white;
+    border-radius: $radius-lg;
+    box-shadow: 0 2px 8px $shadow-light;
   }
 
   &__progress-bar {
     flex: 1;
     height: 8px;
-    background: #E5E7EB;
-    border-radius: 4px;
+    background: $gray-200;
+    border-radius: $radius-sm;
     overflow: hidden;
     width: 100%;
   }
 
   &__progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+    background: linear-gradient(90deg, $primary-green 0%, $primary-green-hover 100%);
     transition: width 0.3s ease;
   }
 
   &__progress-text {
     font-weight: 600;
-    color: #374151;
+    color: $text-secondary;
     min-width: 80px;
     text-align: center;
   }
@@ -368,17 +381,17 @@ function formatDate(dateStr: string): string {
     gap: 0.5rem;
     width: 100%;
     padding: 1rem;
-    background: #F3F4F6;
-    color: #374151;
-    border: 2px dashed #D1D5DB;
-    border-radius: 12px;
+    background: $gray-100;
+    color: $text-secondary;
+    border: 2px dashed $gray-300;
+    border-radius: $radius-lg;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: #E5E7EB;
-      border-color: #9CA3AF;
+      background: $gray-200;
+      border-color: $gray-400;
     }
   }
 
@@ -390,7 +403,7 @@ function formatDate(dateStr: string): string {
   &__selection-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1F2937;
+    color: $text-primary;
     margin: 0 0 0.5rem;
 
     @media (min-width: 768px) {
@@ -399,7 +412,7 @@ function formatDate(dateStr: string): string {
   }
 
   &__selection-subtitle {
-    color: #6B7280;
+    color: $text-muted;
     font-size: 1rem;
     margin: 0;
 
@@ -419,18 +432,49 @@ function formatDate(dateStr: string): string {
 
   &__filter {
     padding: 0.75rem 1rem;
-    border: 1px solid #D1D5DB;
-    border-radius: 8px;
-    background: white;
-    font-size: 0.875rem;
-    color: #374151;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    background: $white;
+    font-size: $text-sm;
+    color: $text-secondary;
     min-width: 150px;
 
     &:focus {
       outline: none;
-      border-color: #2563EB;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      border-color: $primary-blue;
+      box-shadow: 0 0 0 3px $shadow-blue;
     }
+  }
+
+  &__favorites-filter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid $gray-300;
+    border-radius: $radius-md;
+    background: $white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $favorite;
+      background: $favorite-light;
+    }
+  }
+
+  &__favorites-checkbox {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    accent-color: $favorite;
+  }
+
+  &__favorites-label {
+    font-size: 0.875rem;
+    color: $text-secondary;
+    font-weight: 500;
+    user-select: none;
   }
 
   &__exercises {
@@ -443,10 +487,10 @@ function formatDate(dateStr: string): string {
   &__selection-actions {
     position: sticky;
     bottom: 2rem;
-    background: white;
+    background: $white;
     padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    border-radius: $radius-lg;
+    box-shadow: 0 8px 32px $shadow-medium;
     text-align: center;
   }
 
@@ -455,19 +499,19 @@ function formatDate(dateStr: string): string {
     align-items: center;
     gap: 0.5rem;
     padding: 1rem 2rem;
-    background: #2563EB;
-    color: white;
+    background: $primary-blue;
+    color: $white;
     border: none;
-    border-radius: 12px;
+    border-radius: $radius-lg;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: #1D4ED8;
+      background: $primary-blue-hover;
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 8px 24px $shadow-green;
     }
   }
 }

@@ -24,7 +24,10 @@ const { t } = useI18n();
 <template>
   <div 
     class="exercise-card" 
-    :class="{ 'exercise-card--selected': isSelected }"
+    :class="{ 
+      'exercise-card--selected': isSelected,
+      'exercise-card--favorite': exercise.favorites 
+    }"
     @click="$emit('select', exercise)"
   >
     <div class="exercise-card__header">
@@ -68,6 +71,24 @@ const { t } = useI18n();
   &--selected {
     border-color: #2563EB;
     background: linear-gradient(135deg, #EBF4FF 0%, white 100%);
+  }
+
+  &--favorite {
+    border-color: #FFD700;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.2);
+    
+    &:hover {
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.3);
+    }
+    
+    &.exercise-card--selected {
+      border-color: #2563EB;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2), 0 0 0 3px rgba(255, 215, 0, 0.3);
+      
+      &:hover {
+        box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3), 0 0 0 3px rgba(255, 215, 0, 0.4);
+      }
+    }
   }
 
   &__header {

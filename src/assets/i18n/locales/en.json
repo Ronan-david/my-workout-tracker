@@ -155,6 +155,8 @@
     "filters": {
       "all-categories": "All Categories",
       "all-difficulties": "All Difficulties",
+      "all-exercises": "All Exercises",
+      "favorites": "Favorites Only",
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"

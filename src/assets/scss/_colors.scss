@@ -20,6 +20,10 @@ $gray-700: #374151;
 $gray-800: #1f2937;
 $gray-900: #111827;
 
+// Accent Colors
+$gold: #FFD700;
+$gold-light: #FFFBF0;
+
 // Semantic Colors
 $success: #10B981;
 $success-hover: #059669;
@@ -29,6 +33,8 @@ $warning: #F59E0B;
 $warning-hover: #D97706;
 $info: $primary-blue;
 $info-hover: $primary-blue-hover;
+$favorite: $gold;
+$favorite-light: $gold-light;
 
 // Shadow Colors
 $shadow-overlay: rgba(0, 0, 0, 0.5);
@@ -37,6 +43,9 @@ $shadow-medium: rgba(0, 0, 0, 0.15);
 $shadow-green: rgba(16, 185, 129, 0.3);
 $shadow-blue: rgba(37, 99, 235, 0.1);
 $shadow-error: rgba(239, 68, 68, 0.3);
+$shadow-gold: rgba(255, 215, 0, 0.2);
+$shadow-gold-medium: rgba(255, 215, 0, 0.3);
+$shadow-gold-strong: rgba(255, 215, 0, 0.4);
 
 // Background Colors
 $bg-primary: $white;

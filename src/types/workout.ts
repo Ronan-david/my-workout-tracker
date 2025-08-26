@@ -5,6 +5,7 @@ export interface Exercise {
   description: string;
   targetMuscles: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  favorites: boolean;
 }
 
 export interface WorkoutSet {
