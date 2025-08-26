@@ -74,17 +74,18 @@ watch(() => sets.value, () => {
 </script>
 
 <template>
-  <div class="set-tracker">
+  <div class="set-tracker" data-testid="set-tracker">
     <div class="set-tracker__exercise-info">
       <div class="">
-        <h3>{{ exercise.name }}</h3>
-        <p>{{ exercise.description }}</p>
+        <h3 data-testid="exercise-name">{{ exercise.name }}</h3>
+        <p data-testid="exercise-description">{{ exercise.description }}</p>
       </div>
 
       <div class="set-tracker__buttons">
         <button
           @click="deleteExercise"
           class="set-tracker__buttons--cancel"
+          data-testid="delete-exercise-btn"
         >
           <CircleMinus :size="18" />
         </button>
@@ -96,12 +97,13 @@ watch(() => sets.value, () => {
         <div 
           class="set-tracker__row"
           :class="{ completed: isSetCompleted(set) }"
+          :data-testid="`set-row-${index}`"
         >
-          <span class="set-tracker__number">{{ t('set-tracker.set') }} {{ index + 1 }}</span>
+          <span class="set-tracker__number" :data-testid="`set-number-${index}`" data-i18n="set-tracker.set">{{ t('set-tracker.set') }} {{ index + 1 }}</span>
           
           <div class="set-tracker__inputs">
             <div class="input-group">
-              <label>{{ t('set-tracker.reps') }}</label>
+              <label data-i18n="set-tracker.reps">{{ t('set-tracker.reps') }}</label>
               <input 
                 type="number" 
                 v-model.number="set.reps" 
@@ -109,11 +111,13 @@ watch(() => sets.value, () => {
                 :min="0"
                 class="set-tracker__select"
                 :placeholder="t('set-tracker.select-reps')"
+                :data-testid="`reps-input-${index}`"
+                data-i18n-placeholder="set-tracker.select-reps"
               />
             </div>
 
             <div class="input-group">
-              <label>{{ t('set-tracker.weight') }}</label>
+              <label data-i18n="set-tracker.weight">{{ t('set-tracker.weight') }}</label>
               <input 
                 type="number" 
                 v-model.number="set.weight" 
@@ -121,11 +125,13 @@ watch(() => sets.value, () => {
                 :min="0"
                 class="set-tracker__select"
                 :placeholder="t('set-tracker.select-weights')"
+                :data-testid="`weight-input-${index}`"
+                data-i18n-placeholder="set-tracker.select-weights"
               />
             </div>
           </div>
 
-          <div v-if="isSetCompleted(set)" class="set-tracker__complete">
+          <div v-if="isSetCompleted(set)" class="set-tracker__complete" :data-testid="`complete-icon-${index}`">
             <CheckCircle :size="20" class="complete-icon" />
           </div>
         </div>
@@ -134,12 +140,14 @@ watch(() => sets.value, () => {
     
 
     <div class="set-tracker__summary">
-      <p>{{ t('set-tracker.completed-sets', { completed: completedSets, total: sets.length }) }}</p>
+      <p data-testid="completed-sets-text" data-i18n="set-tracker.completed-sets">{{ t('set-tracker.completed-sets', { completed: completedSets, total: sets.length }) }}</p>
 
-      <div v-if="allSetsCompleted" class="set-tracker__summary-buttons">
+      <div v-if="allSetsCompleted" class="set-tracker__summary-buttons" data-testid="add-set-buttons">
         <button 
           @click="duplicateLastSet"
           class="add-set-btn"
+          data-testid="duplicate-set-btn"
+          data-i18n="set-tracker.duplicate-set"
         >
           <Plus :size="16" />
           {{ t('set-tracker.duplicate-set') }}
@@ -147,6 +155,8 @@ watch(() => sets.value, () => {
         <button 
           @click="addSet"
           class="add-set-btn"
+          data-testid="add-set-btn"
+          data-i18n="set-tracker.add-set"
         >
           <Plus :size="16" />
             {{ t('set-tracker.add-set') }}
