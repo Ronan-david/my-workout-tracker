@@ -7,8 +7,9 @@
   },
   "workout": {
     "title": "Entraînements récents",
-    "exercise": "exercice | { count } exercices",
-    "set": "série | { count } séries",
+    "exercise": "1 exercice | { count } exercices",
+    "rep": "1 rép | { count } réps",
+    "set": "1 série | { count } séries",
     "status": {
       "completed": "Terminé",
       "in-progress": "En cours"
@@ -169,6 +170,87 @@
       "start-today": "Commencer l'entraînement",
       "view-all": "Voir tous les entraînements"
     },
-    "error": "Une erreur s'est produite lors de la récupération des entraînements. Veuillez réessayer plus tard."
+    "error": "Une erreur s'est produite lors de la récupération des entraînements. Veuillez réessayer plus tard.",
+    "programs": {
+      "title": "Programmes d'entraînement",
+      "powerlifting": {
+        "name": "Programme de force sur 12 semaines",
+        "description": "Développez votre force avec les mouvements de base du powerlifting. Personnalisez avec votre 1RM."
+      }
+    }
+  },
+  "powerlifting-program": {
+    "title": "Programme de force sur 12 semaines",
+    "subtitle": "Sélectionnez les exercices et entrez votre charge maximale (1RM) pour créer un programme de force personnalisé",
+    "one-rep-max": "{ exercise }: { orm } kg/lbs",
+    "sections": {
+      "main-lifts": {
+        "title": "Mouvements principaux",
+        "subtitle": "Mouvements de base du powerlifting - hautement recommandé pour tout programme"
+      },
+      "accessory-lifts": {
+        "title": "Mouvements accessoires",
+        "subtitle": "Mouvements de soutien pour compléter vos mouvements principaux et cibler les faiblesses"
+      }
+    },
+    "exercises": {
+      "squat": {
+        "name": "Squat arrière",
+        "description": "Le roi des exercices du bas du corps - développe la force et la masse globales"
+      },
+      "bench": {
+        "name": "Développé couché",
+        "description": "Mouvement de poussée classique du haut du corps pour les pectoraux, épaules et triceps"
+      },
+      "deadlift": {
+        "name": "Soulevé de terre conventionnel",
+        "description": "Mouvement composé du corps entier - le test ultime de force"
+      },
+      "overhead-press": {
+        "name": "Développé militaire",
+        "description": "Développé militaire debout pour la force des épaules et du tronc"
+      },
+      "front-squat": {
+        "name": "Squat avant",
+        "description": "Variante de squat axée sur les quadriceps avec accent sur la stabilité du tronc"
+      },
+      "incline-bench": {
+        "name": "Développé incliné",
+        "description": "Mouvement de poussée axé sur le haut des pectoraux"
+      },
+      "sumo-deadlift": {
+        "name": "Soulevé de terre sumo",
+        "description": "Variante de soulevé de terre dominée par les hanches avec stance plus large"
+      },
+      "close-grip-bench": {
+        "name": "Développé couché prise serrée",
+        "description": "Variante de développé couché axée sur les triceps"
+      }
+    },
+    "form": {
+      "orm-label": "Charge maximale (kg/lbs) :",
+      "orm-placeholder": "Entrez votre 1RM",
+      "summary-title": "Résumé du programme",
+      "summary-text": "{count} exercice sélectionné pour votre programme de force de 12 semaines | {count} exercices sélectionnés pour votre programme de force de 12 semaines",
+      "orm-display": "1RM : {orm} kg/lbs"
+    },
+    "buttons": {
+      "cancel": "Annuler",
+      "create-program": "Créer le programme sur 12 semaines"
+    },
+    "validation": {
+      "no-exercises": "Veuillez sélectionner au moins un exercice pour votre programme",
+      "invalid-orm": "Veuillez entrer une charge maximale valide (supérieure à 0)"
+    },
+    "success": {
+      "title": "Programme de force sur 12 semaines créé !",
+      "message": "Exercices sélectionnés : {count}\nPrêt à commencer votre parcours de force !"
+    },
+    "calculator": {
+      "title": "Calculateur de programme de force",
+      "week": "Semaine {week}",
+      "day": "Jour {day}",
+      "accessory": "Exercices accessoires"
+    }
   }
 }

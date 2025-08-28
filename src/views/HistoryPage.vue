@@ -32,11 +32,11 @@ const exportData = async () => {
         <p class="history-page__subtitle">{{ t('history-page.subtitle') }}</p>
       </div>
       <div class="history-page__header-actions">
-        <AddWorkoutButton />
         <button @click="exportData" class="history-page__export-btn">
           <Download :size="18" />
           {{ t('history-page.export-btn') }}
         </button>
+        <AddWorkoutButton />
       </div>
     </header>
 
@@ -99,6 +99,7 @@ const exportData = async () => {
 
   &__header-actions {
     display: flex;
+    flex-direction: column;
     gap: 1rem;
     align-items: center;
   }
@@ -203,7 +204,6 @@ const exportData = async () => {
     }
 
     &__header-actions {
-      flex-direction: column;
       gap: 0.75rem;
       width: 100%;
     }

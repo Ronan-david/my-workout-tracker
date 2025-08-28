@@ -7,8 +7,9 @@
   },
   "workout": {
     "title": "Recent Workouts",
-    "exercise": "exercise | { count } exercises",
-    "set": "set | { count } sets",
+    "exercise": "1 exercise | { count } exercises",
+    "rep": "1 rep | { count } reps",
+    "set": "1 set | { count } sets",
     "status": {
       "completed": "Completed",
       "in-progress": "In Progress"
@@ -169,6 +170,87 @@
       "start-today": "Start Today's Workout",
       "view-all": "View All Workouts"
     },
-    "error": "An error occurred while fetching workouts. Please try again later."
+    "error": "An error occurred while fetching workouts. Please try again later.",
+    "programs": {
+      "title": "Training Programs",
+      "powerlifting": {
+        "name": "12-Week Powerlifting Program",
+        "description": "Build strength with the core powerlifting movements. Customize with your 1RM."
+      }
+    }
+  },
+  "powerlifting-program": {
+    "title": "12-Week Powerlifting Program",
+    "subtitle": "Select exercises and enter your One Rep Max (1RM) to create a personalized strength program",
+    "one-rep-max": "{ exercise }: { orm } kg/lbs",
+    "sections": {
+      "main-lifts": {
+        "title": "Main Lifts",
+        "subtitle": "Core powerlifting movements - highly recommended for any program"
+      },
+      "accessory-lifts": {
+        "title": "Accessory Lifts",
+        "subtitle": "Support movements to complement your main lifts and target weaknesses"
+      }
+    },
+    "exercises": {
+      "squat": {
+        "name": "Back Squat",
+        "description": "The king of lower body exercises - builds overall strength and mass"
+      },
+      "bench": {
+        "name": "Bench Press",
+        "description": "Classic upper body pressing movement for chest, shoulders, and triceps"
+      },
+      "deadlift": {
+        "name": "Conventional Deadlift",
+        "description": "Full body compound movement - the ultimate test of strength"
+      },
+      "overhead-press": {
+        "name": "Overhead Press",
+        "description": "Standing military press for shoulder and core strength"
+      },
+      "front-squat": {
+        "name": "Front Squat",
+        "description": "Quad-focused squat variation with emphasis on core stability"
+      },
+      "incline-bench": {
+        "name": "Incline Bench Press",
+        "description": "Upper chest focused pressing movement"
+      },
+      "sumo-deadlift": {
+        "name": "Sumo Deadlift",
+        "description": "Hip-dominant deadlift variation with wider stance"
+      },
+      "close-grip-bench": {
+        "name": "Close Grip Bench Press",
+        "description": "Tricep-focused bench press variation"
+      }
+    },
+    "form": {
+      "orm-label": "One Rep Max (lbs/kg):",
+      "orm-placeholder": "Enter your 1RM",
+      "summary-title": "Program Summary",
+      "summary-text": "{count} exercise selected for your 12-week powerlifting program | {count} exercises selected for your 12-week powerlifting program",
+      "orm-display": "1RM: {orm} lbs/kg"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "create-program": "Create 12-Week Program"
+    },
+    "validation": {
+      "no-exercises": "Please select at least one exercise for your program",
+      "invalid-orm": "Please enter a valid One Rep Max (greater than 0)"
+    },
+    "success": {
+      "title": "12-Week Powerlifting Program Created!",
+      "message": "Selected Exercises: {count}\nReady to start your strength journey!"
+    }
+  },
+  "calculator": {
+    "title": "Strength Program Calculator",
+    "week": "Week {week}",
+    "day": "Day {day}",
+    "accessory": "Accessory Exercises"
   }
 }

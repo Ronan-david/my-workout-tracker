@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Play } from 'lucide-vue-next';
+import { Play, Dumbbell } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 import EmptyWorkout from '@/components/EmptyWorkout.vue';
 import WorkoutSection from '@/components/WorkoutSection.vue';
@@ -32,7 +32,29 @@ const getLastThreeWorkouts = () => {
       </div>
     </header>
 
+
+
     <div class="dashboard-page__content">
+      <div class="dashboard-page__programs">
+        <h2 class="dashboard-page__programs-title">{{ t('dashboard-page.programs.title') }}</h2>
+        <div class="dashboard-page__program-cards">
+          <router-link 
+            to="/my-workout-tracker/powerlifting-program"
+            class="dashboard-page__program-card"
+          >
+            <div class="dashboard-page__program-icon">
+              <Dumbbell :size="32" />
+            </div>
+            <div class="dashboard-page__program-info">
+              <h3 class="dashboard-page__program-name">{{ t('dashboard-page.programs.powerlifting.name') }}</h3>
+              <p class="dashboard-page__program-description">
+                {{ t('dashboard-page.programs.powerlifting.description') }}
+              </p>
+            </div>
+          </router-link>
+        </div>
+      </div>
+
       <LoadingComp v-if="loading" />
       <p v-else-if="error" class="dashboard-page__error">
         {{ t('dashboard-page.error') }}
@@ -133,6 +155,74 @@ const getLastThreeWorkouts = () => {
     border: 1px solid $error-hover;
     border-radius: $radius-md;
     margin: $space-4 0;
+  }
+
+  &__programs {
+    margin: $space-10 0;
+  }
+
+  &__programs-title {
+    font-size: $text-2xl;
+    font-weight: $font-bold;
+    margin: 0 0 $space-6;
+    color: $text-primary;
+    text-align: center;
+  }
+
+  &__program-cards {
+    display: grid;
+    gap: $space-6;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+
+  &__program-card {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-6;
+    background: $white;
+    border: 2px solid $gray-200;
+    border-radius: $radius-xl;
+    text-decoration: none;
+    color: $text-primary;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 12px $shadow-light;
+
+    &:hover {
+      border-color: $primary-red;
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(229, 62, 62, 0.2);
+    }
+  }
+
+  &__program-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, $primary-red 0%, #c53030 100%);
+    border-radius: $radius-lg;
+    color: $white;
+    flex-shrink: 0;
+  }
+
+  &__program-info {
+    flex: 1;
+  }
+
+  &__program-name {
+    font-size: $text-lg;
+    font-weight: $font-semibold;
+    margin: 0 0 $space-2;
+    color: $text-primary;
+  }
+
+  &__program-description {
+    font-size: $text-sm;
+    color: $text-secondary;
+    margin: 0;
+    line-height: 1.4;
   }
 }
 

@@ -60,11 +60,11 @@ const hasCompletedSets = computed(() => {
   return currentWorkout.value?.exercises.some(ex => ex.sets.length > 0) || false;
 });
 
-function isExerciseSelected(exerciseId: string): boolean {
+const isExerciseSelected = (exerciseId: string): boolean => {
   return selectedExercises.value.some(ex => ex.id === exerciseId);
 }
 
-function toggleExercise(exercise: Exercise) {
+const toggleExercise = (exercise: Exercise) => {
   const index = selectedExercises.value.findIndex(ex => ex.id === exercise.id);
   if (index >= 0) {
     selectedExercises.value.splice(index, 1);
